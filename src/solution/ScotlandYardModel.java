@@ -12,6 +12,9 @@ public class ScotlandYardModel extends ScotlandYard {
 
     public ScotlandYardModel(int numberOfDetectives, List<Boolean> rounds, String graphFileName) throws IOException {
         super(numberOfDetectives, rounds, graphFileName);
+
+        ScotlandYardView ScotlandYardInitial = new ScotlandYardView();
+
     }
 
     @Override
