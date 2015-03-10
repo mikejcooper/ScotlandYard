@@ -1,12 +1,12 @@
 package scotlandyard;
 
 public abstract class Move {
-  public Move(Colour colour) {
-    this.colour = colour;
-  }
 
-  public final Colour colour;
+    public final Colour colour;
 
+    public Move(Colour colour) {
+        this.colour = colour;
+    }
 
   @Override
   public boolean equals(Object obj) {

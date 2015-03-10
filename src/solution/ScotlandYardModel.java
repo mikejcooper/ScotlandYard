@@ -3,17 +3,24 @@ package solution;
 import scotlandyard.*;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ScotlandYardModel extends ScotlandYard {
+
+    private List<Boolean> rounds;
+    private Graph graph;
+    private Map<Colour, GamePlayer> colourGamePlayerMap = new HashMap<Colour, GamePlayer>();
+    private int numberOfDetectives;
 
 
     public ScotlandYardModel(int numberOfDetectives, List<Boolean> rounds, String graphFileName) throws IOException {
         super(numberOfDetectives, rounds, graphFileName);
+        this.numberOfDetectives = numberOfDetectives;
+        this.rounds = rounds;
+        ScotlandYardGraphReader graphReader = new ScotlandYardGraphReader();
+        this.graph = graphReader.readGraph(graphFileName);
 
-        ScotlandYardView ScotlandYardInitial = new ScotlandYardView();
+
 
     }
 
@@ -43,8 +50,8 @@ public class ScotlandYardModel extends ScotlandYard {
     }
 
     @Override
-    protected List<Move> validMoves(Colour player) {
-        return null;
+    protected List<Move> validMoves(Colour player) { //todo this is new
+        return colourGamePlayerMap.get(player).getMoves(graph);
     }
 
     @Override
@@ -54,12 +61,14 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public boolean join(Player player, Colour colour, int location, Map<Ticket, Integer> tickets) {
-        return false;
+        if(colourGamePlayerMap.containsKey(colour)) return false; //todo might cause bugs, or is unnecissary
+        colourGamePlayerMap.put(colour, new GamePlayer(player, colour, location, tickets));
+        return true;
     }
 
     @Override
     public List<Colour> getPlayers() {
-        return null;
+        return new ArrayList<Colour>(colourGamePlayerMap.keySet());
     }
 
     @Override
@@ -69,12 +78,13 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public int getPlayerLocation(Colour colour) {
-        return 0;
+        return colourGamePlayerMap.get(colour).getLocation();
     }
 
     @Override
-    public int getPlayerTickets(Colour colour, Ticket ticket) {
-        return 0;
+    public int getPlayerTickets(Colour colour, Ticket ticket) {//todo this is new
+        return colourGamePlayerMap.get(colour).getNumberOfTicket(ticket);
+
     }
 
     @Override
@@ -84,7 +94,8 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public boolean isReady() {
-        return false;
+        if(1 + numberOfDetectives > colourGamePlayerMap.size()) return false;
+        else return true;
     }
 
     @Override
@@ -98,7 +109,5 @@ public class ScotlandYardModel extends ScotlandYard {
     }
 
     @Override
-    public List<Boolean> getRounds() {
-        return null;
-    }
+    public List<Boolean> getRounds() { return rounds; }//todo not sure if this is right
 }
