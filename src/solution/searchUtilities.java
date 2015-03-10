@@ -3,6 +3,7 @@ package solution;
 import scotlandyard.Colour;
 import scotlandyard.Edge;
 import scotlandyard.Route;
+import scotlandyard.ScotlandYard;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,10 +14,11 @@ import java.util.List;
  */
 public class SearchUtilities {
 
-
-
-
-
+    public void mrXLocationUpdateCheck (int location){
+        if(ScotlandYardModel.rounds.get(ScotlandYardModel.roundCount)) {
+            ScotlandYardModel.mrXLocations.add(location);
+        }
+    }
 
     public GamePlayer findPlayer (Colour colour) {
         return ScotlandYardModel.colourGamePlayerMap.get(colour);

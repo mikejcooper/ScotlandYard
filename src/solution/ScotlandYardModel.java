@@ -9,12 +9,13 @@ public class ScotlandYardModel extends ScotlandYard {
 
     public static Graph<Integer,Route> graph;
     public static List<Boolean> rounds;
-    public static LinkedHashMap<Colour, GamePlayer> colourGamePlayerMap;
+    public static Map<Colour, GamePlayer> colourGamePlayerMap;
     //Linked Hash maps keeps in input order. Map does not.
     private int numberOfDetectives;
     private Colour currentPlayer;
     public static int roundCount;
     SearchUtilities searchUtilities;
+    public static List mrXLocations;
 
 
 
@@ -26,7 +27,7 @@ public class ScotlandYardModel extends ScotlandYard {
         this.numberOfDetectives = numberOfDetectives;
         this.rounds = rounds;
 
-        colourGamePlayerMap = new  LinkedHashMap<Colour,GamePlayer>();
+        colourGamePlayerMap = new HashMap<Colour, GamePlayer>();
         graph = new ScotlandYardGraphReader().readGraph(graphFileName);
         searchUtilities = new SearchUtilities();
         currentPlayer = Colour.Black;
@@ -51,11 +52,7 @@ public class ScotlandYardModel extends ScotlandYard {
         if (previousIndex == playerColours.size()) {
             currentPlayer = playerColours.get(0);
             roundCount++;
-            for (GamePlayer gamePlayer : colourGamePlayerMap.values()) {
-                if(gamePlayer instanceof MrX){
-                    ((MrX) gamePlayer).checkVisibleLocation();
-                }
-            }
+            searchUtilities.mrXLocationUpdateCheck(searchUtilities.findPlayer(currentPlayer).getLocation());
         }
         else{
             currentPlayer = playerColours.get(previousIndex + 1);
@@ -89,23 +86,23 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public boolean join(Player player, Colour colour, int location, Map<Ticket,Integer> tickets) {
+        int check = 0;
 
-        if (colourGamePlayerMap.containsKey(colour)) return false;
-        else if (colour == Colour.Black) {
-            colourGamePlayerMap.put(colour, new MrX(player, colour, location, tickets));
-            return true;
+        if (colourGamePlayerMap.containsKey(colour))
+            check = 0;
+        else {
+            colourGamePlayerMap.put(colour, new GamePlayer(player, colour, location, tickets));
+            check = 1;
         }
-        //ensure MrX is on top of Map 'Stack'
-        else if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
+
+        if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
             GamePlayer temp = searchUtilities.findPlayer(Colour.Black);
             searchUtilities.removePlayer(Colour.Black);
             colourGamePlayerMap.put(Colour.Black, temp);
-            return true;
         }
-        else {
-            colourGamePlayerMap.put(colour, new GamePlayer(player, colour, location, tickets));
-            return true;
-        }
+
+        if(check == 1) return true;
+        else return false;
     }
 
     @Override
