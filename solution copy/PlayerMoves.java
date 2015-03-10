@@ -1,6 +1,7 @@
 package solution;
 
 import scotlandyard.*;
+import solution.SearchUtilities;
 
 import java.io.IOException;
 import java.lang.annotation.Target;
@@ -33,7 +34,7 @@ public class PlayerMoves {
     }
 
     protected List<Edge> fullyConnectedEdges (){
-        List<Edge> fullyConnectedEdges = new ConnectedEdges().getConnectedEdges(location);
+        List<Edge> fullyConnectedEdges = new SearchUtilities().getConnectedEdges(location);
         return fullyConnectedEdges;
     }
 

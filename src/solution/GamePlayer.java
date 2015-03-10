@@ -2,6 +2,7 @@ package solution;
 
 import scotlandyard.*;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +11,10 @@ import java.util.Map;
  * Created by gebruiker on 09/03/2015.
  */
 public class GamePlayer implements Player{
-    private Player player;
-    private Colour colour;
-    private int location;
-    private Map<Ticket,Integer> tickets;
+    protected Player player;
+    protected Colour colour;
+    protected int location;
+    protected Map<Ticket,Integer> tickets;
 
     public GamePlayer(Player player, Colour colour, int location, Map<Ticket,Integer> tickets){
         this.player = player;
@@ -38,17 +39,8 @@ public class GamePlayer implements Player{
         return tickets.get(ticket);
     }
 
-    public List<Move> getMoves(Graph graph){//todo this is new
-        List<Move> list = new LinkedList<Move>();
-        List<Edge> edges = graph.getEdges();
-
-        for(Edge edge : edges){
-            int i = Integer.valueOf((String) edge.source());
-            int j = Integer.valueOf((String) edge.target());
-            if( i == location) list.add(new MoveTicket(colour,j,Ticket.valueOf((String) edge.data())));
-            if( j == location) list.add(new MoveTicket(colour,i,Ticket.valueOf((String) edge.data())));
-        }
-        return list;
+    public List<Move> getMoves(){
+        return new GameBoardMoves().getMoves(colour,location,tickets);
     }
 
 

@@ -7,31 +7,59 @@ import java.util.*;
 
 public class ScotlandYardModel extends ScotlandYard {
 
-    private List<Boolean> rounds;
-    private Graph graph;
-    private Map<Colour, GamePlayer> colourGamePlayerMap = new HashMap<Colour, GamePlayer>();
+    public static Graph<Integer,Route> graph;
+    public static List<Boolean> rounds;
+    public static LinkedHashMap<Colour, GamePlayer> colourGamePlayerMap;
+    //Linked Hash maps keeps in input order. Map does not.
     private int numberOfDetectives;
+    private Colour currentPlayer;
+    public static int roundCount;
+    SearchUtilities searchUtilities;
+
+
+
 
 
     public ScotlandYardModel(int numberOfDetectives, List<Boolean> rounds, String graphFileName) throws IOException {
         super(numberOfDetectives, rounds, graphFileName);
+
         this.numberOfDetectives = numberOfDetectives;
         this.rounds = rounds;
-        ScotlandYardGraphReader graphReader = new ScotlandYardGraphReader();
-        this.graph = graphReader.readGraph(graphFileName);
 
-
-
+        colourGamePlayerMap = new  LinkedHashMap<Colour,GamePlayer>();
+        graph = new ScotlandYardGraphReader().readGraph(graphFileName);
+        searchUtilities = new SearchUtilities();
+        currentPlayer = Colour.Black;
+        roundCount = 0;
     }
+
+
 
     @Override
     protected Move getPlayerMove(Colour colour) {
-        return null;
+        GamePlayer player = searchUtilities.findPlayer(colour);
+
+        return player.notify(getPlayerLocation(colour),validMoves(colour));
     }
 
     @Override
     protected void nextPlayer() {
+        List<Colour> playerColours = new ArrayList<Colour>(colourGamePlayerMap.keySet());
 
+        int previousIndex = playerColours.indexOf(currentPlayer);
+
+        if (previousIndex == playerColours.size()) {
+            currentPlayer = playerColours.get(0);
+            roundCount++;
+            for (GamePlayer gamePlayer : colourGamePlayerMap.values()) {
+                if(gamePlayer instanceof MrX){
+                    ((MrX) gamePlayer).checkVisibleLocation();
+                }
+            }
+        }
+        else{
+            currentPlayer = playerColours.get(previousIndex + 1);
+        }
     }
 
     @Override
@@ -50,8 +78,8 @@ public class ScotlandYardModel extends ScotlandYard {
     }
 
     @Override
-    protected List<Move> validMoves(Colour player) { //todo this is new
-        return colourGamePlayerMap.get(player).getMoves(graph);
+    protected List<Move> validMoves(Colour player) {
+        return colourGamePlayerMap.get(player).getMoves();
     }
 
     @Override
@@ -60,10 +88,24 @@ public class ScotlandYardModel extends ScotlandYard {
     }
 
     @Override
-    public boolean join(Player player, Colour colour, int location, Map<Ticket, Integer> tickets) {
-        if(colourGamePlayerMap.containsKey(colour)) return false; //todo might cause bugs, or is unnecissary
-        colourGamePlayerMap.put(colour, new GamePlayer(player, colour, location, tickets));
-        return true;
+    public boolean join(Player player, Colour colour, int location, Map<Ticket,Integer> tickets) {
+
+        if (colourGamePlayerMap.containsKey(colour)) return false;
+        else if (colour == Colour.Black) {
+            colourGamePlayerMap.put(colour, new MrX(player, colour, location, tickets));
+            return true;
+        }
+        //ensure MrX is on top of Map 'Stack'
+        else if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
+            GamePlayer temp = searchUtilities.findPlayer(Colour.Black);
+            searchUtilities.removePlayer(Colour.Black);
+            colourGamePlayerMap.put(Colour.Black, temp);
+            return true;
+        }
+        else {
+            colourGamePlayerMap.put(colour, new GamePlayer(player, colour, location, tickets));
+            return true;
+        }
     }
 
     @Override
@@ -100,14 +142,15 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public Colour getCurrentPlayer() {
-        return null;
+        return currentPlayer;
     }
 
     @Override
     public int getRound() {
-        return 0;
+        return roundCount;
     }
 
     @Override
-    public List<Boolean> getRounds() { return rounds; }//todo not sure if this is right
+    public List<Boolean> getRounds() {
+        return rounds; }
 }
