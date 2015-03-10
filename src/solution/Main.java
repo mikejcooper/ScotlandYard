@@ -17,6 +17,7 @@ import java.util.Set;
 public class Main {
 
         public static void main(String[] args) throws IOException {
+            // Hello World
             List<Boolean> list = null;
             ScotlandYardModel scotlandYardModel = new ScotlandYardModel(5, list, "graph.txt");
 
