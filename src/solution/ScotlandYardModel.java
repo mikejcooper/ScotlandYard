@@ -92,19 +92,15 @@ public class ScotlandYardModel extends ScotlandYard {
         int check = 0;
 
         if (colourGamePlayerMap.containsKey(colour))
-            check = 0;
+            return false;
+        else if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
+            colourGamePlayerMap = searchUtilities.getSortedMap();
+            return true;
+        }
         else {
             colourGamePlayerMap.put(colour, new GamePlayer(player, colour, location, tickets));
-            check = 1;
+            return true;
         }
-        if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
-            GamePlayer temp = searchUtilities.findPlayer(Colour.Black);
-            searchUtilities.removePlayer(Colour.Black);
-            colourGamePlayerMap.put(Colour.Black, temp);
-        }
-
-        if(check == 1) return true;
-        else return false;
     }
 
     @Override

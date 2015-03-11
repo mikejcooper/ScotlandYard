@@ -2,9 +2,7 @@ package solution;
 
 import scotlandyard.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by MikeCooper on 10/03/15.
@@ -90,5 +88,16 @@ public class SearchUtilities {
         return Integer.parseInt(edge.target().toString());
     }
 
-    protected void sortMap 
+    protected Map<Colour, GamePlayer> getSortedMap (){
+        Map<Colour, GamePlayer> sortedColourGamePlayerMap = new LinkedHashMap<Colour, GamePlayer>();
+
+        GamePlayer mrX = mScotlandYard.getColourGamePlayerMap().get(Colour.Black);
+        sortedColourGamePlayerMap.put(Colour.Black, mrX);
+        mScotlandYard.getColourGamePlayerMap().remove(Colour.Black, mrX);
+
+        for (Colour colour : mScotlandYard.getColourGamePlayerMap().keySet()) {
+            sortedColourGamePlayerMap.put(colour, mScotlandYard.getColourGamePlayerMap().get(colour));
+        }
+        return sortedColourGamePlayerMap;
+    }
 }
