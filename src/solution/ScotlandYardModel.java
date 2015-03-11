@@ -7,15 +7,14 @@ import java.util.*;
 
 public class ScotlandYardModel extends ScotlandYard {
 
-    public static Graph<Integer,Route> graph;
-    public static List<Boolean> rounds;
-    public static Map<Colour, GamePlayer> colourGamePlayerMap;
-    //Linked Hash maps keeps in input order. Map does not.
+    private Graph<Integer,Route> graph;
+    private List<Boolean> rounds;
+    private Map<Colour, GamePlayer> colourGamePlayerMap;
     private int numberOfDetectives;
     private Colour currentPlayer;
-    public static int roundCount;
+    private int roundCount;
+    private List<Integer> mrXLocations;
     SearchUtilities searchUtilities;
-    public static List mrXLocations;
 
 
 
@@ -27,20 +26,20 @@ public class ScotlandYardModel extends ScotlandYard {
         this.numberOfDetectives = numberOfDetectives;
         this.rounds = rounds;
 
-        colourGamePlayerMap = new HashMap<Colour, GamePlayer>();
+        colourGamePlayerMap = new LinkedHashMap<Colour, GamePlayer>();
         graph = new ScotlandYardGraphReader().readGraph(graphFileName);
-        searchUtilities = new SearchUtilities();
+        searchUtilities = new SearchUtilities(this);
         currentPlayer = Colour.Black;
         roundCount = 0;
+        mrXLocations = new ArrayList<Integer>();
     }
-
 
 
     @Override
     protected Move getPlayerMove(Colour colour) {
-        GamePlayer player = searchUtilities.findPlayer(colour);
+        GamePlayer gamePlayer = searchUtilities.findPlayer(colour);
 
-        return player.notify(getPlayerLocation(colour),validMoves(colour));
+        return gamePlayer.getPlayer().notify(getPlayerLocation(colour),validMoves(colour));
     }
 
     @Override
@@ -49,13 +48,17 @@ public class ScotlandYardModel extends ScotlandYard {
 
         int previousIndex = playerColours.indexOf(currentPlayer);
 
-        if (previousIndex == playerColours.size()) {
+        if (previousIndex + 1 == numberOfDetectives + 1) {
             currentPlayer = playerColours.get(0);
-            roundCount++;
-            searchUtilities.mrXLocationUpdateCheck(searchUtilities.findPlayer(currentPlayer).getLocation());
         }
         else{
             currentPlayer = playerColours.get(previousIndex + 1);
+        }
+
+
+        if (searchUtilities.findPlayer(currentPlayer).equals(Colour.Black)) {
+            roundCount++;
+            searchUtilities.mrXLocationUpdateCheck(searchUtilities.findPlayer(currentPlayer).getLocation());
         }
     }
 
@@ -76,7 +79,7 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     protected List<Move> validMoves(Colour player) {
-        return colourGamePlayerMap.get(player).getMoves();
+        return searchUtilities.getMoves(player);
     }
 
     @Override
@@ -94,7 +97,6 @@ public class ScotlandYardModel extends ScotlandYard {
             colourGamePlayerMap.put(colour, new GamePlayer(player, colour, location, tickets));
             check = 1;
         }
-
         if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
             GamePlayer temp = searchUtilities.findPlayer(Colour.Black);
             searchUtilities.removePlayer(Colour.Black);
@@ -150,4 +152,18 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     public List<Boolean> getRounds() {
         return rounds; }
+
+    public Map<Colour, GamePlayer> getColourGamePlayerMap() {
+        return colourGamePlayerMap; }
+
+    public Graph<Integer,Route> getGraph() {
+        return graph; }
+
+    public int getRoundCount() {
+        return roundCount; }
+
+    public List<Integer> getMrXLocations(){
+        return mrXLocations;
+    }
+
 }

@@ -39,9 +39,7 @@ public class GamePlayer implements Player{
         return tickets.get(ticket);
     }
 
-    public List<Move> getMoves(){
-        return new GameBoardMoves().getMoves(colour,location,tickets);
-    }
+    public Player getPlayer(){ return player; }
 
 
 
