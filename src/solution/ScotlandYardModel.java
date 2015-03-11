@@ -89,7 +89,6 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public boolean join(Player player, Colour colour, int location, Map<Ticket,Integer> tickets) {
-        int check = 0;
 
         if (colourGamePlayerMap.containsKey(colour))
             return false;
