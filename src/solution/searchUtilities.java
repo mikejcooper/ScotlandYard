@@ -15,8 +15,6 @@ public class SearchUtilities {
     public SearchUtilities(ScotlandYardModel scotlandYard){
         mScotlandYard = scotlandYard;
         moveList = new ArrayList<Move>();
-
-
     }
 
     public void mrXLocationUpdateCheck (int location){
@@ -33,19 +31,20 @@ public class SearchUtilities {
         mScotlandYard.getColourGamePlayerMap().remove(colour, mScotlandYard.getColourGamePlayerMap().get(colour));
     }
 
-    protected List<Move> getMoves (Colour colour) {
+    protected List<Move> getMoves (Colour colour) {//todo we still need to implement double moves, and the checks if players are on the same spot,and the fact a player CAN stand on mrX location
         int location = findPlayer(colour).getLocation();
         Map<Ticket,Integer> tickets = findPlayer(colour).getTickets();
 
-        moveList = allPossibleMoves(colour, location);
+        allPossibleMoves(colour, location);
 
         if(moveList.size() == 0 || tickets.size() == 0) {
             return new ArrayList<Move>();
         }
-        return filterMovesByTickets(tickets);
+        filterMovesByTickets(tickets);
+        return moveList;
     }
 
-    protected List<Move> filterMovesByTickets (Map<Ticket,Integer> ticketMap) {
+    protected void filterMovesByTickets (Map<Ticket,Integer> ticketMap) {
         List<MoveTicket> moveTicketList = new ArrayList<MoveTicket>();
         //finds MoveTickets in moveList
         for (Move move : moveList) {
@@ -69,16 +68,13 @@ public class SearchUtilities {
                 moveList.remove(move);
             }
         }
-
-        return moveList;
     }
 
-    protected List<Move> allPossibleMoves (Colour colour, int location) {
+    protected void allPossibleMoves (Colour colour, int location) {
         for (Edge edge : getConnectedEdges(location)) {
             MoveTicket newMoveTicket = new MoveTicket(colour,getTarget(edge),getTicket(edge));
             moveList.add(newMoveTicket);
         }
-        return moveList;
     }
 
     public List<Edge> getConnectedEdges(int node){

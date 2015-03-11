@@ -38,8 +38,10 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     protected Move getPlayerMove(Colour colour) {
         GamePlayer gamePlayer = searchUtilities.findPlayer(colour);
-
-        return gamePlayer.getPlayer().notify(getPlayerLocation(colour),validMoves(colour));
+        List<Move> validMoves = validMoves(colour);
+        Move move = gamePlayer.getPlayer().notify(getPlayerLocation(colour),validMoves(colour));
+        if(validMoves.contains(move)) return move;
+        return new MovePass(colour); //todo look back at specifications this might be wrong
     }
 
     @Override
@@ -50,7 +52,7 @@ public class ScotlandYardModel extends ScotlandYard {
         if (previousIndex + 1 == numberOfDetectives + 1) {
             currentPlayer = playerColours.get(0);
         }
-        else if (searchUtilities.findPlayer(currentPlayer).equals(Colour.Black)) {
+        else if (searchUtilities.findPlayer(currentPlayer).getColour().equals(Colour.Black)) {
             roundCount++;
             searchUtilities.mrXLocationUpdateCheck(searchUtilities.findPlayer(currentPlayer).getLocation());
         }
@@ -59,20 +61,26 @@ public class ScotlandYardModel extends ScotlandYard {
         }
     }
 
-    @Override
-    protected void play(MoveTicket move) {
-
+    @Override//removes ticket and adds to mr x, location is updated
+    protected void play(MoveTicket move) {//todo see how tickets are made and if they can be used as identifier
+        colourGamePlayerMap.get(currentPlayer).removeOrAddTicket(move.ticket, -1);
+        colourGamePlayerMap.get(currentPlayer).setLocation(move.target);
+        if(Colour.Black !=  move.colour) colourGamePlayerMap.get(Colour.Black).removeOrAddTicket(move.ticket, +1);
     }
 
     @Override
-    protected void play(MoveDouble move) {
-
+    protected void play(MoveDouble move) {//todo assuming both moves in doublemove are of type movetickets
+        for(int i=0;i <2;i++){
+        if(move.moves.get(i) instanceof MoveTicket) play((MoveTicket) move.moves.get(i));
+        }
     }
 
     @Override
-    protected void play(MovePass move) {
+    protected void play(MovePass move) {//todo no idea what this is
+
 
     }
+
 
     @Override
     protected List<Move> validMoves(Colour player) {
@@ -115,7 +123,7 @@ public class ScotlandYardModel extends ScotlandYard {
     }
 
     @Override
-    public int getPlayerTickets(Colour colour, Ticket ticket) {//todo this is new
+    public int getPlayerTickets(Colour colour, Ticket ticket) {
         return colourGamePlayerMap.get(colour).getNumberOfTicket(ticket);
 
     }

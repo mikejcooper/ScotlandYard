@@ -31,6 +31,8 @@ public class GamePlayer implements Player{
         return location;
     }
 
+    public void setLocation(int location) { this.location = location; }
+
     public Map<Ticket, Integer> getTickets(){
         return tickets;
     }
@@ -38,6 +40,14 @@ public class GamePlayer implements Player{
     public int getNumberOfTicket(Ticket ticket){
         return tickets.get(ticket);
     }
+
+
+    //assuming earlier check if ticket is available
+    public void removeOrAddTicket(Ticket ticket,int n){
+        int value = tickets.remove(ticket);
+        tickets.put(ticket,value + n);
+    }
+
 
     public Player getPlayer(){ return player; }
 
