@@ -10,7 +10,7 @@ import java.util.*;
 public class SearchUtilities {
 
     private final ScotlandYardModel mScotlandYard;
-    List<Move> moveList = new ArrayList<Move>();
+    private List<Move> moveList;
 
     public SearchUtilities(ScotlandYardModel scotlandYard){
         mScotlandYard = scotlandYard;
@@ -37,43 +37,55 @@ public class SearchUtilities {
         int location = findPlayer(colour).getLocation();
         Map<Ticket,Integer> tickets = findPlayer(colour).getTickets();
 
-        allPossibleMoves(colour, location);
+        moveList = allPossibleMoves(colour, location);
+
         if(moveList.size() == 0 || tickets.size() == 0) {
             return new ArrayList<Move>();
         }
         return filterMovesByTickets(tickets);
     }
 
-    protected List<Move> filterMovesByTickets (Map<Ticket,Integer> tickets) {
-        List<Move> moveListTemp = moveList;
-        List<Ticket> list = new ArrayList<Ticket>(tickets.keySet());
+    protected List<Move> filterMovesByTickets (Map<Ticket,Integer> ticketMap) {
+        List<MoveTicket> moveTicketList = new ArrayList<MoveTicket>();
+        //finds MoveTickets in moveList
+        for (Move move : moveList) {
+            if (move instanceof MoveTicket){
+                moveTicketList.add((MoveTicket) move);
+            }
+        }
 
-        for (Move move : moveListTemp) {
-            if (!list.contains(move)){
+        //remove Tickets -> 0 (that map to)
+        for (Iterator<Map.Entry<Ticket, Integer>> ticketMap2 = ticketMap.entrySet().iterator(); ticketMap2.hasNext(); ) {
+            Map.Entry<Ticket, Integer> entry = ticketMap2.next();
+            if (entry.getValue() == 0) {
+                ticketMap.remove(entry.getValue(), entry.getKey());
+            }
+        }
+
+        List<Ticket> availibleTickets = new ArrayList<Ticket>(ticketMap.keySet());
+
+        for (MoveTicket move : moveTicketList) {
+            if (!availibleTickets.contains(move.ticket)) {
                 moveList.remove(move);
             }
         }
+
         return moveList;
     }
 
     protected List<Move> allPossibleMoves (Colour colour, int location) {
-        for (Edge edge : fullyConnectedEdges(location)) {
+        for (Edge edge : getConnectedEdges(location)) {
             MoveTicket newMoveTicket = new MoveTicket(colour,getTarget(edge),getTicket(edge));
             moveList.add(newMoveTicket);
         }
         return moveList;
     }
 
-    protected List<Edge> fullyConnectedEdges (int location){
-        List<Edge> fullyConnectedEdges = getConnectedEdges(location);
-        return fullyConnectedEdges;
-    }
-
     public List<Edge> getConnectedEdges(int node){
         List<Edge> connectedEdges = new ArrayList<Edge>();
 
         for (Edge<Integer, Route> edge : mScotlandYard.getGraph().getEdges()) {
-            if (node == edge.source()) {
+            if (node == edge.source() || node == edge.target()) {
                 connectedEdges.add(edge);
             }
         }

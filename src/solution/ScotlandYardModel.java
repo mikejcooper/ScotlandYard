@@ -45,20 +45,17 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     protected void nextPlayer() {
         List<Colour> playerColours = new ArrayList<Colour>(colourGamePlayerMap.keySet());
-
         int previousIndex = playerColours.indexOf(currentPlayer);
 
         if (previousIndex + 1 == numberOfDetectives + 1) {
             currentPlayer = playerColours.get(0);
         }
-        else{
-            currentPlayer = playerColours.get(previousIndex + 1);
-        }
-
-
-        if (searchUtilities.findPlayer(currentPlayer).equals(Colour.Black)) {
+        else if (searchUtilities.findPlayer(currentPlayer).equals(Colour.Black)) {
             roundCount++;
             searchUtilities.mrXLocationUpdateCheck(searchUtilities.findPlayer(currentPlayer).getLocation());
+        }
+        else{
+            currentPlayer = playerColours.get(previousIndex + 1);
         }
     }
 
