@@ -89,4 +89,6 @@ public class SearchUtilities {
     protected int getTarget (Edge edge){
         return Integer.parseInt(edge.target().toString());
     }
+
+    protected void sortMap 
 }
