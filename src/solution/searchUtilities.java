@@ -90,7 +90,9 @@ public class SearchUtilities {
 
     protected void allPossibleMoves (Colour colour, int location, List<Move> moveList) {
         for (Edge edge : getConnectedEdges(location)) {
-            MoveTicket newMoveTicket = new MoveTicket(colour,getTarget(edge),getTicket(edge));
+            MoveTicket newMoveTicket;
+            if(location == getSource(edge)) newMoveTicket = new MoveTicket(colour,getTarget(edge),getTicket(edge));
+            else newMoveTicket = new MoveTicket(colour,getSource(edge),getTicket(edge));
             moveList.add(newMoveTicket);
         }
     }
@@ -123,6 +125,10 @@ public class SearchUtilities {
 
     protected int getTarget (Edge edge){
         return Integer.parseInt(edge.target().toString());
+    }
+
+    protected int getSource (Edge edge){
+        return Integer.parseInt(edge.source().toString());
     }
 
     private List<Move> checkNull (List<Move> moveList) {

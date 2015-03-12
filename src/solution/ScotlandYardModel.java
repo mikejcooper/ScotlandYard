@@ -32,6 +32,7 @@ public class ScotlandYardModel extends ScotlandYard {
         currentPlayer = Colour.Black;
         roundCount = 0;
         mrXLocations = new ArrayList<Integer>();
+        mrXLocations.add(0);
     }
 
 
@@ -50,7 +51,7 @@ public class ScotlandYardModel extends ScotlandYard {
         int previousIndex = playerColours.indexOf(currentPlayer);
 
         if (searchUtilities.findPlayer(currentPlayer).getColour().equals(Colour.Black)) {
-            roundCount++;
+            //roundCount++;
             searchUtilities.mrXLocationUpdateCheck(searchUtilities.findPlayer(currentPlayer).getLocation());
         }
         if (previousIndex + 1 == numberOfDetectives + 1) {
@@ -62,10 +63,11 @@ public class ScotlandYardModel extends ScotlandYard {
     }
 
     @Override//removes ticket and adds to mr x, location is updated
-    protected void play(MoveTicket move) {//todo see how tickets are made and if they can be used as identifier
+    protected void play(MoveTicket move) {
         colourGamePlayerMap.get(move.colour).removeOrAddTicket(move.ticket, -1);
         colourGamePlayerMap.get(move.colour).setLocation(move.target);
         if(Colour.Black !=  move.colour) colourGamePlayerMap.get(Colour.Black).removeOrAddTicket(move.ticket, +1);
+        else roundCount++;//todo check this in rulebook,tests say roundcount should go up twice if doublemove is used
     }
 
     @Override
