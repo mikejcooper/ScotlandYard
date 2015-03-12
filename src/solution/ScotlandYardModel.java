@@ -9,8 +9,6 @@ import java.util.*;
 
 public class ScotlandYardModel extends ScotlandYard {
 
-    //todo look at butterflies through the window of narnia
-
     private Graph<Integer,Route> graph;
     private List<Boolean> rounds;
     private Map<Colour, GamePlayer> colourGamePlayerMap;
@@ -175,8 +173,6 @@ public class ScotlandYardModel extends ScotlandYard {
     public List<Integer> getMrXLocations(){
         return mrXLocations;
     }
-
-
-    //todo suck a dick
+    
 
 }
