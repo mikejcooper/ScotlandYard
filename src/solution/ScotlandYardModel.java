@@ -14,7 +14,7 @@ public class ScotlandYardModel extends ScotlandYard {
     private Colour currentPlayer;
     private int roundCount;
     private List<Integer> mrXLocations;
-    SearchUtilities searchUtilities;
+    GamePlayerMoveUtilities gamePlayerMoveUtilities;
 
 
 
@@ -28,7 +28,7 @@ public class ScotlandYardModel extends ScotlandYard {
 
         colourGamePlayerMap = new LinkedHashMap<Colour, GamePlayer>();
         graph = new ScotlandYardGraphReader().readGraph(graphFileName);
-        searchUtilities = new SearchUtilities(this);
+        gamePlayerMoveUtilities = new GamePlayerMoveUtilities(this);
         currentPlayer = Colour.Black;
         roundCount = 0;
         mrXLocations = new ArrayList<Integer>();
@@ -38,7 +38,7 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     protected Move getPlayerMove(Colour colour) {
-        GamePlayer gamePlayer = searchUtilities.findPlayer(colour);
+        GamePlayer gamePlayer = gamePlayerMoveUtilities.findPlayer(colour);
         List<Move> validMoves = validMoves(colour);
         Move move = gamePlayer.getPlayer().notify(getPlayerLocation(colour),validMoves);
         if(validMoves.contains(move)) return move;
@@ -50,9 +50,9 @@ public class ScotlandYardModel extends ScotlandYard {
         List<Colour> playerColours = new ArrayList<Colour>(colourGamePlayerMap.keySet());
         int previousIndex = playerColours.indexOf(currentPlayer);
 
-        if (searchUtilities.findPlayer(currentPlayer).getColour().equals(Colour.Black)) {
+        if (gamePlayerMoveUtilities.findPlayer(currentPlayer).getColour().equals(Colour.Black)) {
             //roundCount++;
-            searchUtilities.mrXLocationUpdateCheck(searchUtilities.findPlayer(currentPlayer).getLocation());
+            gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(currentPlayer).getLocation());
         }
         if (previousIndex + 1 == numberOfDetectives + 1) {
             currentPlayer = playerColours.get(0);
@@ -90,7 +90,7 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     protected List<Move> validMoves(Colour player) {
-        return searchUtilities.getMoves(player);
+        return gamePlayerMoveUtilities.getMoves(player);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ScotlandYardModel extends ScotlandYard {
         if (colourGamePlayerMap.containsKey(colour))
             return false;
         else if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
-            colourGamePlayerMap = searchUtilities.getSortedMap();
+            colourGamePlayerMap = gamePlayerMoveUtilities.getSortedMap();
             return true;
         }
         else {
