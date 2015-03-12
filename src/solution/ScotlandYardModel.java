@@ -41,7 +41,7 @@ public class ScotlandYardModel extends ScotlandYard {
         List<Move> validMoves = validMoves(colour);
         Move move = gamePlayer.getPlayer().notify(getPlayerLocation(colour),validMoves(colour));
         if(validMoves.contains(move)) return move;
-        return new MovePass(colour); //todo look back at specifications this might be wrong
+        else return new MovePass(colour); //todo look back at specifications this might be wrong
     }
 
     @Override
@@ -49,12 +49,12 @@ public class ScotlandYardModel extends ScotlandYard {
         List<Colour> playerColours = new ArrayList<Colour>(colourGamePlayerMap.keySet());
         int previousIndex = playerColours.indexOf(currentPlayer);
 
-        if (previousIndex + 1 == numberOfDetectives + 1) {
-            currentPlayer = playerColours.get(0);
-        }
-        else if (searchUtilities.findPlayer(currentPlayer).getColour().equals(Colour.Black)) {
+        if (searchUtilities.findPlayer(currentPlayer).getColour().equals(Colour.Black)) {
             roundCount++;
             searchUtilities.mrXLocationUpdateCheck(searchUtilities.findPlayer(currentPlayer).getLocation());
+        }
+        if (previousIndex + 1 == numberOfDetectives + 1) {
+            currentPlayer = playerColours.get(0);
         }
         else{
             currentPlayer = playerColours.get(previousIndex + 1);
@@ -63,15 +63,15 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override//removes ticket and adds to mr x, location is updated
     protected void play(MoveTicket move) {//todo see how tickets are made and if they can be used as identifier
-        colourGamePlayerMap.get(currentPlayer).removeOrAddTicket(move.ticket, -1);
-        colourGamePlayerMap.get(currentPlayer).setLocation(move.target);
+        colourGamePlayerMap.get(move.colour).removeOrAddTicket(move.ticket, -1);
+        colourGamePlayerMap.get(move.colour).setLocation(move.target);
         if(Colour.Black !=  move.colour) colourGamePlayerMap.get(Colour.Black).removeOrAddTicket(move.ticket, +1);
     }
 
     @Override
-    protected void play(MoveDouble move) {//todo assuming both moves in doublemove are of type movetickets
+    protected void play(MoveDouble move) {
         for(int i=0;i <2;i++){
-        if(move.moves.get(i) instanceof MoveTicket) play((MoveTicket) move.moves.get(i));
+            play(move.moves.get(i));
         }
     }
 
