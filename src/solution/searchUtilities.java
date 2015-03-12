@@ -95,10 +95,8 @@ public class SearchUtilities {
 
     protected void allPossibleMoves (Colour colour, int location, List<Move> moveList) { //todo this was buggy so i changed it, delete this comment when read
         for (Edge edge : getConnectedEdges(location)) {
-            MoveTicket newMoveTicket;
-            if(location == getSource(edge)) newMoveTicket = new MoveTicket(colour,getTarget(edge),getTicket(edge));
-            else newMoveTicket = new MoveTicket(colour,getSource(edge),getTicket(edge));
-            moveList.add(newMoveTicket);
+            if(location == getSource(edge)) moveList.add(new MoveTicket(colour,getTarget(edge),getTicket(edge)));
+            moveList.add(new MoveTicket(colour,getSource(edge),getTicket(edge)));
         }
     }
 

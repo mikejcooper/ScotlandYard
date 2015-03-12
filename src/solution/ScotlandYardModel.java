@@ -40,7 +40,7 @@ public class ScotlandYardModel extends ScotlandYard {
     protected Move getPlayerMove(Colour colour) {
         GamePlayer gamePlayer = searchUtilities.findPlayer(colour);
         List<Move> validMoves = validMoves(colour);
-        Move move = gamePlayer.getPlayer().notify(getPlayerLocation(colour),validMoves(colour));
+        Move move = gamePlayer.getPlayer().notify(getPlayerLocation(colour),validMoves);
         if(validMoves.contains(move)) return move;
         else return new MovePass(colour); //todo look back at specifications this might be wrong
     }
