@@ -1,6 +1,8 @@
 package solution;
 
 import scotlandyard.*;
+import solution.GamePlayer.GamePlayer;
+import solution.GamePlayer.GamePlayerMoveUtilities;
 
 import java.io.IOException;
 import java.util.*;

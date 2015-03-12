@@ -1,6 +1,8 @@
-package solution;
+package solution.GamePlayer;
 
 import scotlandyard.*;
+import solution.GamePlayer.GamePlayer;
+import solution.ScotlandYardModel;
 
 import java.util.*;
 
@@ -16,7 +18,7 @@ public class GamePlayerMoveUtilities {
     }
 
 
-    protected List<Move> getMoves (Colour colour) {
+    public List<Move> getMoves(Colour colour) {
         int location = findPlayer(colour).getLocation();
         Map<Ticket,Integer> ticketMap = findPlayer(colour).getTickets();
 
@@ -173,7 +175,7 @@ public class GamePlayerMoveUtilities {
 
 
     //other functions
-    protected Map<Colour, GamePlayer> getSortedMap (){
+    public Map<Colour, GamePlayer> getSortedMap(){
         Map<Colour, GamePlayer> sortedColourGamePlayerMap = new LinkedHashMap<Colour, GamePlayer>();
 
         GamePlayer mrX = mScotlandYard.getColourGamePlayerMap().get(Colour.Black);
