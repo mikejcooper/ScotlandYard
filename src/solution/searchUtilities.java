@@ -24,11 +24,16 @@ public class SearchUtilities {
         Map<Ticket,Integer> ticketMap = findPlayer(colour).getTickets();
 
         List<Move> moveList2 = new ArrayList<Move>(getMovesAroundNode (colour,location,ticketMap));
+        //todo double moves should only be calculated for mrX
         List<Move> moveList3 = new ArrayList<Move>(calculateDoubleMoves(ticketMap,colour,moveList2));
 
         List<Move> moveList = new ArrayList<Move>();
         moveList.addAll(moveList2);
         moveList.addAll(moveList3);
+
+        //todo if movelist is empty we need to add a movepass, delete this comment when you read it mike :)
+        //todo also i want to go over this function together, i think we can make it a lot smaller
+        if(moveList.isEmpty()) moveList.add(new MovePass(colour));
 
         return moveList;
     }
@@ -42,7 +47,7 @@ public class SearchUtilities {
         return moveList;
     }
 
-    private List<Move> calculateDoubleMoves(Map<Ticket,Integer> ticketMap, Colour colour, List<Move> moveList) {
+    private List<Move> calculateDoubleMoves(Map<Ticket,Integer> ticketMap, Colour colour, List<Move> moveList) {//todo look at the removevaluefromticket statement,removal of tickets is handled in the play function
         List<MoveTicket> moveTicketList = new ArrayList<MoveTicket>(filterMoveTickets(moveList));
 
         List<Move> fullNodeMoveList = new ArrayList<Move>();
@@ -88,7 +93,7 @@ public class SearchUtilities {
         }
     }
 
-    protected void allPossibleMoves (Colour colour, int location, List<Move> moveList) {
+    protected void allPossibleMoves (Colour colour, int location, List<Move> moveList) { //todo this was buggy so i changed it, delete this comment when read
         for (Edge edge : getConnectedEdges(location)) {
             MoveTicket newMoveTicket;
             if(location == getSource(edge)) newMoveTicket = new MoveTicket(colour,getTarget(edge),getTicket(edge));
