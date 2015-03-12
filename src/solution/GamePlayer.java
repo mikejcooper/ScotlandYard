@@ -42,7 +42,6 @@ public class GamePlayer implements Player{
     }
 
 
-    //assuming earlier check if ticket is available
     public void removeOrAddTicket(Ticket ticket,int n){
         int value = tickets.remove(ticket);
         tickets.put(ticket,value + n);
@@ -50,12 +49,6 @@ public class GamePlayer implements Player{
 
 
     public Player getPlayer(){ return player; }
-
-    public void removeValueFromTicket (Ticket ticket) {
-        int a = tickets.get(ticket);
-        tickets.remove(ticket, a);
-        tickets.put(ticket,a++);
-    }
 
 
 

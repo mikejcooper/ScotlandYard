@@ -66,8 +66,12 @@ public class ScotlandYardModel extends ScotlandYard {
     protected void play(MoveTicket move) {
         colourGamePlayerMap.get(move.colour).removeOrAddTicket(move.ticket, -1);
         colourGamePlayerMap.get(move.colour).setLocation(move.target);
-        if(Colour.Black !=  move.colour) colourGamePlayerMap.get(Colour.Black).removeOrAddTicket(move.ticket, +1);
-        else roundCount++;//todo check this in rulebook,tests say roundcount should go up twice if doublemove is used
+        if(Colour.Black !=  move.colour) {
+            colourGamePlayerMap.get(Colour.Black).removeOrAddTicket(move.ticket, +1);
+        }
+        else {
+            roundCount++;//todo check this in rulebook,tests say roundcount should go up twice if doublemove is used
+        }
     }
 
     @Override

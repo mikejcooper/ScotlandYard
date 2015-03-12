@@ -10,62 +10,69 @@ import java.util.*;
 public class SearchUtilities {
 
     private final ScotlandYardModel mScotlandYard;
-    private List<Move> moveList2;
 
     public SearchUtilities(ScotlandYardModel scotlandYard){
         mScotlandYard = scotlandYard;
-        moveList2 = new ArrayList<Move>();
     }
 
 
-
-    protected List<Move> getMoves (Colour colour) {//todo we still need to implement double moves, and the checks if players are on the same spot,and the fact a player CAN stand on mrX location
+    protected List<Move> getMoves (Colour colour) {
         int location = findPlayer(colour).getLocation();
         Map<Ticket,Integer> ticketMap = findPlayer(colour).getTickets();
 
-        List<Move> moveList2 = new ArrayList<Move>(getMovesAroundNode (colour,location,ticketMap));
-        //todo double moves should only be calculated for mrX
-        List<Move> moveList3 = new ArrayList<Move>(calculateDoubleMoves(ticketMap,colour,moveList2));
+        List<Move> moveListAll = new ArrayList<Move>();
+        List<MoveDouble> moveDoubleList = new ArrayList<MoveDouble>();
+        List<Move> moveList = getMovesAroundNode (colour,location,ticketMap);
 
-        List<Move> moveList = new ArrayList<Move>();
-        moveList.addAll(moveList2);
-        moveList.addAll(moveList3);
+        if (colour.equals(Colour.Black) && ticketMap.get(Ticket.DoubleMove) != 0) {
+            moveDoubleList = calculateDoubleMoves(ticketMap, colour, moveList);
+            //remove starting node - i think this could be a tacticle move so maybe not?
+        }
+        //todo is this correct?
+        if(moveList.isEmpty() && !colour.equals(Colour.Black)) {
+            moveList.add(new MovePass(colour));
+        }
 
-        //todo if movelist is empty we need to add a movepass, delete this comment when you read it mike :)
-        //todo also i want to go over this function together, i think we can make it a lot smaller
-        if(moveList.isEmpty()) moveList.add(new MovePass(colour));
-
-        return moveList;
+        moveListAll.addAll(moveList);
+        moveListAll.addAll(moveDoubleList);
+        return moveListAll;
     }
 
     protected List<Move> getMovesAroundNode (Colour colour, int location, Map<Ticket,Integer> tickets) {
         List<Move> moveList = new ArrayList<Move>();
 
-        allPossibleMoves(colour, location, moveList);
-        removeCurrentPLayersPosition(moveList);
-        filterMovesByTickets(tickets, moveList);
+        moveList = allPossibleMoves(colour, location, moveList, tickets);
+        moveList = removeCurrentPLayersPosition(moveList);
+        moveList = filterMovesByTickets(tickets, moveList);
         return moveList;
     }
 
-    private List<Move> calculateDoubleMoves(Map<Ticket,Integer> ticketMap, Colour colour, List<Move> moveList) {//todo look at the removevaluefromticket statement,removal of tickets is handled in the play function
+    private List<MoveDouble> calculateDoubleMoves(Map<Ticket,Integer> ticketMap, Colour colour, List<Move> moveList) {
         List<MoveTicket> moveTicketList = new ArrayList<MoveTicket>(filterMoveTickets(moveList));
-
-        List<Move> fullNodeMoveList = new ArrayList<Move>();
+        List<MoveDouble> moveDoubleList = new ArrayList<MoveDouble>();
 
         for (MoveTicket moveTicket : moveTicketList) {
             Map<Ticket,Integer> ticketMapTemp = new HashMap<Ticket, Integer>(ticketMap);
-
-            findPlayer(colour).removeValueFromTicket(moveTicket.ticket);
-            //Null??
-//            ticketMapTemp.replace(moveTicket.ticket, ticketMapTemp.get(colour), ticketMapTemp.get(colour)-1);
-            List<Move> currentNodeMoveList = getMovesAroundNode(colour,moveTicket.target,ticketMapTemp);
-            fullNodeMoveList.addAll(currentNodeMoveList);
+            //REMOVED TICKET Value***
+            ticketMapTemp.replace(moveTicket.ticket,ticketMapTemp.get(moveTicket.ticket)-1);
+            List<Move> fullNodeMoveList = new ArrayList<Move>(getMovesAroundNode(colour,moveTicket.target,ticketMapTemp));
+            moveDoubleList.addAll(createMoveDoubleList(fullNodeMoveList,moveTicket));
         }
-        return fullNodeMoveList;
-
+        return moveDoubleList;
     }
 
-    private  void removeCurrentPLayersPosition (List<Move> moveList){
+    private List<MoveDouble> createMoveDoubleList (List<Move> moveListAroundCurrentNode, MoveTicket currentNodeTicket){
+        List<MoveTicket> moveList = new ArrayList<MoveTicket>(filterMoveTickets(moveListAroundCurrentNode));
+        List<MoveDouble> moveDoubleList = new ArrayList<MoveDouble>();
+
+        for (MoveTicket moveTicket : moveList) {
+            moveDoubleList.add(new MoveDouble(Colour.Black, currentNodeTicket,moveTicket));
+        }
+
+        return moveDoubleList;
+    }
+
+    private List<Move> removeCurrentPLayersPosition (List<Move> moveList){
         List<Colour> currentPlayers = mScotlandYard.getPlayers();
         currentPlayers.remove(Colour.Black);
         List<MoveTicket> moveTicketList = new ArrayList<MoveTicket>(filterMoveTickets(moveList));
@@ -79,9 +86,11 @@ public class SearchUtilities {
             }
         }
 
+        return moveList;
+
     }
 
-    protected void filterMovesByTickets (Map<Ticket,Integer> ticketMap, List<Move> moveList) {
+    protected List<Move> filterMovesByTickets (Map<Ticket,Integer> ticketMap, List<Move> moveList) {
         List<MoveTicket> moveTicketList = new ArrayList<MoveTicket>(filterMoveTickets(moveList));
 
         List<Ticket> availibleTickets = new ArrayList<Ticket>(getAvailibleTicketsList(ticketMap));
@@ -91,13 +100,28 @@ public class SearchUtilities {
                 moveList.remove(move);
             }
         }
+
+        return moveList;
     }
 
-    protected void allPossibleMoves (Colour colour, int location, List<Move> moveList) { //todo this was buggy so i changed it, delete this comment when read
-        for (Edge edge : getConnectedEdges(location)) {
-            if(location == getSource(edge)) moveList.add(new MoveTicket(colour,getTarget(edge),getTicket(edge)));
-            moveList.add(new MoveTicket(colour,getSource(edge),getTicket(edge)));
+    protected List<Move> allPossibleMoves (Colour colour, int location, List<Move> moveList, Map<Ticket,Integer> ticketMap) { //todo this was buggy so i changed it, delete this comment when read
+        //todo edge<X,Y? correct?
+        for (Edge<Integer,Route> edge : getConnectedEdges(location)) {
+            if(location == getSource(edge)) {
+                moveList.add(new MoveTicket(colour,getTarget(edge),getTicket(edge)));
+                if (!(edge.data() == Route.Boat) && ticketMap.get(Ticket.SecretMove) != 0){
+                    moveList.add(new MoveTicket(colour,getTarget(edge),Ticket.SecretMove));
+                }
+            }
+            else {
+                moveList.add(new MoveTicket(colour,getSource(edge),getTicket(edge)));
+                if (!(edge.data() == Route.Boat) && ticketMap.get(Ticket.SecretMove) != 0){
+                    moveList.add(new MoveTicket(colour,getSource(edge),Ticket.SecretMove));
+                }
+            }
         }
+
+        return moveList;
     }
 
     public List<Edge> getConnectedEdges(int node){
@@ -134,16 +158,6 @@ public class SearchUtilities {
         return Integer.parseInt(edge.source().toString());
     }
 
-    private List<Move> checkNull (List<Move> moveList) {
-
-        if(moveList.size() == 0) {
-            return new ArrayList<Move>();
-        }
-        else {
-            return moveList;
-        }
-
-    }
 
     private List<Ticket> getAvailibleTicketsList (Map<Ticket,Integer> ticketMap) {
         List<Ticket> availibleTickets = new ArrayList<Ticket>();
@@ -182,7 +196,19 @@ public class SearchUtilities {
         return mScotlandYard.getColourGamePlayerMap().get(colour);
     }
 
-    public void removePlayer (Colour colour) {
-        mScotlandYard.getColourGamePlayerMap().remove(colour, mScotlandYard.getColourGamePlayerMap().get(colour));
-    }
 }
+
+//public static class Comparators {
+//
+//    public static List<Move> MoveTicketDuplicates (List<Move> moveList) {
+//        @Override
+//        public int compare(Move o1, Move o2) {
+//            if(o1 instanceof MoveTicket && o2 instanceof MoveTicket) {
+//                if(o1.toString().equals(o2.toString())) {
+//
+//                    return 1;
+//                }
+//            }
+//            else return 1;
+//        }
+//    }
