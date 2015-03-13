@@ -182,10 +182,20 @@ public class ScotlandYardModel extends ScotlandYard {
     protected Move getSpectatorPlayerMove(Colour colour) {
         GamePlayer gamePlayer = gamePlayerMoveUtilities.findPlayer(colour);
         List<Move> validMoves = gamePlayerMoveUtilities.getMoves(colour, getPlayerLocation(colour));
-        Move move = gamePlayer.getPlayer().notify(gamePlayer.getLocation(),validMoves);
+        Move move;
 
+        //todo noftify should not be called when no changes have occured/player has already be notified.
+        if(gameChanges()){
+            move = gamePlayer.getPlayer().notify(gamePlayer.getLocation(),validMoves);
+        }
+        else {
+            move = new MovePass(colour);
+        }
         return move;
+    }
 
+    protected Boolean gameChanges (){
+        return false;
     }
 
 
