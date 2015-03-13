@@ -41,9 +41,7 @@ public class ScotlandYardModel extends ScotlandYard {
         List<Move> validMoves = validMoves(colour);
         Move move = gamePlayer.getPlayer().notify(gamePlayer.getLocation(),validMoves);
 
-        if (!colour.equals(Colour.Black) && validMoves.size() == 0) {
-            move = new MovePass(colour);
-        }
+        //todo if mrX has no possible moves game is over
 
         return move;
 
@@ -85,7 +83,8 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     protected void play(MovePass move) {//todo no idea what this is
-        roundCount++;
+        //todo detectives can also do a passmove
+        //roundCount++;
     }
 
 
@@ -190,6 +189,5 @@ public class ScotlandYardModel extends ScotlandYard {
 
 
 
-//todo nvdjsonojnfskjnvkjrnsjkfnkdjwngfkljbnwrjlnbklrwenslknfbvlkndsflknblkjewrnkljfbnkjers
 
 }
