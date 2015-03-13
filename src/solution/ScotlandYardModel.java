@@ -39,7 +39,7 @@ public class ScotlandYardModel extends ScotlandYard {
     protected Move getPlayerMove(Colour colour) {
         GamePlayer gamePlayer = gamePlayerMoveUtilities.findPlayer(colour);
         List<Move> validMoves = validMoves(colour);
-        Move move = gamePlayer.getPlayer().notify(getPlayerLocation(colour),validMoves);
+        Move move = gamePlayer.getPlayer().notify(gamePlayer.getLocation(),validMoves);
         if(validMoves.contains(move)) return move;
         else return new MovePass(colour); //todo look back at specifications this might be wrong
     }
@@ -91,7 +91,7 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public void spectate(Spectator spectator) {
-
+        spectator.notify(getPlayerMove(getCurrentPlayer()));
     }
 
     @Override
@@ -122,14 +122,12 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     public int getPlayerLocation(Colour colour) {
         if(colour.equals(Colour.Black)){
-//            if(getCurrentPlayer().equals(Colour.Black) && !getRounds().get(getRounds().size()-1)){
-//                return gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation();
-//            }
-
-                return getMrXLocations().get(getMrXLocations().size() - 1);
-
+            return getMrXLocations().get(getMrXLocations().size() - 1);
+            }
+        else {
+            return colourGamePlayerMap.get(colour).getLocation();
         }
-        return colourGamePlayerMap.get(colour).getLocation();
+
     }
 
     @Override
@@ -175,6 +173,8 @@ public class ScotlandYardModel extends ScotlandYard {
     public List<Integer> getMrXLocations(){
         return mrXLocations;
     }
+
+
 
 //todo nvdjsonojnfskjnvkjrnsjkfnkdjwngfkljbnwrjlnbklrwenslknfbvlkndsflknblkjewrnkljfbnkjers
 
