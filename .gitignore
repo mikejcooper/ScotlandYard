@@ -4,8 +4,8 @@
 .settings/
 
 # Intellij
-.idea/
-*.iml
+../../.idea/
+../ScotlandYard.iml
 *.iws
 .idea/vcs.xml
 .idea/workspace.xml

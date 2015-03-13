@@ -19,9 +19,6 @@ public class ScotlandYardModel extends ScotlandYard {
     GamePlayerMoveUtilities gamePlayerMoveUtilities;
 
 
-
-
-
     public ScotlandYardModel(int numberOfDetectives, List<Boolean> rounds, String graphFileName) throws IOException {
         super(numberOfDetectives, rounds, graphFileName);
 
@@ -52,10 +49,6 @@ public class ScotlandYardModel extends ScotlandYard {
         List<Colour> playerColours = new ArrayList<Colour>(colourGamePlayerMap.keySet());
         int previousIndex = playerColours.indexOf(currentPlayer);
 
-        if (gamePlayerMoveUtilities.findPlayer(currentPlayer).getColour().equals(Colour.Black)) {
-            //roundCount++;
-            gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(currentPlayer).getLocation());
-        }
         if (previousIndex + 1 == numberOfDetectives + 1) {
             currentPlayer = playerColours.get(0);
         }
@@ -73,6 +66,7 @@ public class ScotlandYardModel extends ScotlandYard {
         }
         else {
             roundCount++;//todo check this in rulebook,tests say roundcount should go up twice if doublemove is used
+            gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation());
         }
     }
 
@@ -105,13 +99,13 @@ public class ScotlandYardModel extends ScotlandYard {
 
         if (colourGamePlayerMap.containsKey(colour))
             return false;
-        else if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
-            colourGamePlayerMap = gamePlayerMoveUtilities.getSortedMap();
-            return true;
-        }
         else {
             colourGamePlayerMap.put(colour, new GamePlayer(player, colour, location, tickets));
-            return true;
+            if (colourGamePlayerMap.size() == numberOfDetectives + 1) {
+                colourGamePlayerMap = gamePlayerMoveUtilities.getSortedMap();
+                gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation());
+            }
+                return true;
         }
     }
 
@@ -127,6 +121,14 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public int getPlayerLocation(Colour colour) {
+        if(colour.equals(Colour.Black)){
+//            if(getCurrentPlayer().equals(Colour.Black) && !getRounds().get(getRounds().size()-1)){
+//                return gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation();
+//            }
+
+                return getMrXLocations().get(getMrXLocations().size() - 1);
+
+        }
         return colourGamePlayerMap.get(colour).getLocation();
     }
 

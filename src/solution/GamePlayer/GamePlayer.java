@@ -1,6 +1,7 @@
 package solution.GamePlayer;
 
 import scotlandyard.*;
+import solution.ScotlandYardModel;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
