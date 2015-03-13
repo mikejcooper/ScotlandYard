@@ -18,8 +18,7 @@ public class GamePlayerMoveUtilities {
     }
 
 
-    public List<Move> getMoves(Colour colour) {
-        int location = findPlayer(colour).getLocation();
+    public List<Move> getMoves(Colour colour, int location) {
         Map<Ticket,Integer> ticketMap = findPlayer(colour).getTickets();
 
         List<Move> moveListAll = new ArrayList<Move>();
@@ -28,7 +27,6 @@ public class GamePlayerMoveUtilities {
 
         if (colour.equals(Colour.Black) && ticketMap.get(Ticket.DoubleMove) != 0) {
             moveDoubleList = calculateDoubleMoves(ticketMap, colour, moveList);
-            //remove starting node - i think this could be a tacticle move so maybe not?
         }
         //todo is this correct?
         if(moveList.isEmpty() && !colour.equals(Colour.Black)) {

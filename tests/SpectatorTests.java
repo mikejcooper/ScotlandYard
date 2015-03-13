@@ -151,15 +151,19 @@ public class SpectatorTests {
         game.spectate(spectator);
         assertEquals("If Mr X is not currently visible, the location in the move should be " +
                 "his last known location", game.getPlayerLocation(Colour.Black), 0);
+
         game.turn();
         assertEquals("If Mr X is not currently visible, the location in the move should be " +
                 "his last known location", game.getPlayerLocation(Colour.Black), 2);
+
         game.turn();
         assertEquals("If Mr X is not currently visible, the location in the move should be " +
                 "his last known location", game.getPlayerLocation(Colour.Black), 2);
+
         game.turn();
         assertEquals("If Mr X is not currently visible, the location in the move should be " +
                 "his last known location", game.getPlayerLocation(Colour.Black), 1);
+
         MoveTicket moveTicket = (MoveTicket) spectator.move;
 
 
