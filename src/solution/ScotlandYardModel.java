@@ -40,9 +40,15 @@ public class ScotlandYardModel extends ScotlandYard {
         GamePlayer gamePlayer = gamePlayerMoveUtilities.findPlayer(colour);
         List<Move> validMoves = validMoves(colour);
         Move move = gamePlayer.getPlayer().notify(gamePlayer.getLocation(),validMoves);
-        if(validMoves.contains(move)) return move;
-        else return new MovePass(colour); //todo look back at specifications this might be wrong
-    }
+
+        if (!colour.equals(Colour.Black) && validMoves.size() == 0) {
+            move = new MovePass(colour);
+        }
+
+        return move;
+
+         //todo look back at specifications this might be wrong
+    }//todo dont like this function
 
     @Override
     protected void nextPlayer() {
@@ -79,19 +85,18 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     protected void play(MovePass move) {//todo no idea what this is
-
-
+        roundCount++;
     }
 
 
     @Override
     protected List<Move> validMoves(Colour player) {
-        return gamePlayerMoveUtilities.getMoves(player);
+        return gamePlayerMoveUtilities.getMoves(player,gamePlayerMoveUtilities.findPlayer(player).getLocation());
     }
 
     @Override
     public void spectate(Spectator spectator) {
-        spectator.notify(getPlayerMove(getCurrentPlayer()));
+        spectator.notify(getSpectatorPlayerMove(getCurrentPlayer()));
     }
 
     @Override
@@ -172,6 +177,15 @@ public class ScotlandYardModel extends ScotlandYard {
 
     public List<Integer> getMrXLocations(){
         return mrXLocations;
+    }
+
+    protected Move getSpectatorPlayerMove(Colour colour) {
+        GamePlayer gamePlayer = gamePlayerMoveUtilities.findPlayer(colour);
+        List<Move> validMoves = gamePlayerMoveUtilities.getMoves(colour, getPlayerLocation(colour));
+        Move move = gamePlayer.getPlayer().notify(gamePlayer.getLocation(),validMoves);
+
+        return move;
+
     }
 
 
