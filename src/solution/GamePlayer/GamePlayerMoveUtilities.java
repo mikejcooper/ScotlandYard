@@ -28,7 +28,6 @@ public class GamePlayerMoveUtilities {
         if (colour.equals(Colour.Black) && ticketMap.get(Ticket.DoubleMove) != 0) {
             moveDoubleList = calculateDoubleMoves(ticketMap, colour, moveList);
         }
-        //todo is this correct?
         if(moveList.isEmpty() && !colour.equals(Colour.Black)) {
             moveList.add(new MovePass(colour));
         }

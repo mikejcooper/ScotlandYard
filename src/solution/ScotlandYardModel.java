@@ -17,6 +17,7 @@ public class ScotlandYardModel extends ScotlandYard {
     private int roundCount;
     private List<Integer> mrXLocations;
     GamePlayerMoveUtilities gamePlayerMoveUtilities;
+    private List<Spectator> spectators;
 
 
     public ScotlandYardModel(int numberOfDetectives, List<Boolean> rounds, String graphFileName) throws IOException {
@@ -32,6 +33,7 @@ public class ScotlandYardModel extends ScotlandYard {
         roundCount = 0;
         mrXLocations = new ArrayList<Integer>();
         mrXLocations.add(0);
+        spectators = new ArrayList<Spectator>();
     }
 
 
@@ -45,8 +47,7 @@ public class ScotlandYardModel extends ScotlandYard {
 
         return move;
 
-         //todo look back at specifications this might be wrong
-    }//todo dont like this function
+    }
 
     @Override
     protected void nextPlayer() {
@@ -72,10 +73,19 @@ public class ScotlandYardModel extends ScotlandYard {
             roundCount++;//todo check this in rulebook,tests say roundcount should go up twice if doublemove is used
             gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation());
         }
+        MoveTicket mrXLastKnownLocationTicket = new MoveTicket(Colour.Black,getPlayerLocation(Colour.Black),move.ticket);
+        if(move.colour == Colour.Black){
+            notifyAllSpectators(mrXLastKnownLocationTicket);
+        }else {
+            notifyAllSpectators(move);
+        }
+        areTicketMapsEmpty();
     }
 
     @Override
     protected void play(MoveDouble move) {
+        notifyAllSpectators(move);
+
         for(int i=0;i <2;i++){
             play(move.moves.get(i));
         }
@@ -83,8 +93,9 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     protected void play(MovePass move) {//todo no idea what this is
-        //todo detectives can also do a passmove
+        //todo only detectives can do a passmove, if detective does one game is over
         //roundCount++;
+        notifyAllSpectators(move);
     }
 
 
@@ -95,7 +106,13 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public void spectate(Spectator spectator) {
-        spectator.notify(getSpectatorPlayerMove(getCurrentPlayer()));
+        spectators.add(spectator);
+    }
+
+    public void notifyAllSpectators(Move move){
+        for(Spectator s : spectators){
+            s.notify(move);
+        }
     }
 
     @Override
@@ -142,13 +159,19 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public boolean isGameOver() {
+        List<Colour> playerColours = new ArrayList<Colour>(colourGamePlayerMap.keySet());
+        if(!isReady()) return false;
+        if(areTicketMapsEmpty())return true;
+        if(roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) return true;
+        if(getPlayerMove(Colour.Black) == null)return true;
+        if(isMrXCaught())return true;
         return false;
+
     }
 
     @Override
     public boolean isReady() {
-        if(1 + numberOfDetectives > colourGamePlayerMap.size()) return false;
-        else return true;
+        return 1 + numberOfDetectives == colourGamePlayerMap.size();
     }
 
     @Override
@@ -178,26 +201,29 @@ public class ScotlandYardModel extends ScotlandYard {
         return mrXLocations;
     }
 
-    protected Move getSpectatorPlayerMove(Colour colour) {
-        GamePlayer gamePlayer = gamePlayerMoveUtilities.findPlayer(colour);
-        List<Move> validMoves = gamePlayerMoveUtilities.getMoves(colour, getPlayerLocation(colour));
-        Move move;
-
-        //todo noftify should not be called when no changes have occured/player has already be notified.
-        if(gameChanges()){
-            move = gamePlayer.getPlayer().notify(gamePlayer.getLocation(),validMoves);
+    private boolean areTicketMapsEmpty(){
+        for(Colour colour : colourGamePlayerMap.keySet()){
+            if(!isMapEmpty(colour) && colour != Colour.Black){
+                return false;
+            }
         }
-        else {
-            move = new MovePass(colour);
-        }
-        return move;
+        return true;
     }
 
-    protected Boolean gameChanges (){
+    private boolean isMapEmpty(Colour colour){
+        Map<Ticket,Integer> map = colourGamePlayerMap.get(colour).getTickets();
+        for(Ticket ticket: map.keySet()){
+            if(map.get(ticket) != 0) return false;
+        }
+        return true;
+    }
+
+    private boolean isMrXCaught(){
+        int mrX = colourGamePlayerMap.get(Colour.Black).getLocation();
+        for(GamePlayer gamePlayer: colourGamePlayerMap.values()){
+            if(gamePlayer.getLocation() == mrX && gamePlayer.getColour() != Colour.Black) return true;
+        }
         return false;
     }
-
-
-
 
 }

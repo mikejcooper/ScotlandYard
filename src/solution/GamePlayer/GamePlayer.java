@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by gebruiker on 09/03/2015.
  */
-public class GamePlayer implements Player{
+public class GamePlayer{
     protected Player player;
     protected Colour colour;
     protected int location;
@@ -51,10 +51,4 @@ public class GamePlayer implements Player{
 
     public Player getPlayer(){ return player; }
 
-
-
-    @Override //todo
-    public Move notify(int location, List<Move> list){
-        return null;
-    }
 }
