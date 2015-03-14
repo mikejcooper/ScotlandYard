@@ -137,7 +137,15 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public Set<Colour> getWinningPlayers() {
-        return null;
+        Set<Colour> winningPlayers = new HashSet<Colour>();
+        if(areTicketMapsEmpty() || (roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) || areAllDetectivesStuck()) {
+            winningPlayers.add(Colour.Black);
+        }
+        if(getPlayerMove(Colour.Black) == null || isMrXCaught()){
+            winningPlayers.addAll(colourGamePlayerMap.keySet());
+            winningPlayers.remove(Colour.Black);
+        }
+        return winningPlayers;
     }
 
     @Override
@@ -159,14 +167,12 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override
     public boolean isGameOver() {
-        List<Colour> playerColours = new ArrayList<Colour>(colourGamePlayerMap.keySet());
         if(!isReady()) return false;
         if(areTicketMapsEmpty())return true;
         if(roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) return true;
         if(getPlayerMove(Colour.Black) == null)return true;
         if(isMrXCaught())return true;
         return false;
-
     }
 
     @Override
@@ -224,6 +230,14 @@ public class ScotlandYardModel extends ScotlandYard {
             if(gamePlayer.getLocation() == mrX && gamePlayer.getColour() != Colour.Black) return true;
         }
         return false;
+    }
+
+    //todo needed for test but highly inefficient and unnecessary
+    private boolean areAllDetectivesStuck(){
+        for(Colour colour : colourGamePlayerMap.keySet()){
+            if(colour != Colour.Black && getPlayerMove(colour) != null) return false;
+        }
+        return true;
     }
 
 }
