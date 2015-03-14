@@ -40,13 +40,7 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     protected Move getPlayerMove(Colour colour) {
         GamePlayer gamePlayer = gamePlayerMoveUtilities.findPlayer(colour);
-        List<Move> validMoves = validMoves(colour);
-        Move move = gamePlayer.getPlayer().notify(gamePlayer.getLocation(),validMoves);
-
-        //todo if mrX has no possible moves game is over
-
-        return move;
-
+        return gamePlayer.getPlayer().notify(gamePlayer.getLocation(), validMoves(colour));
     }
 
     @Override
@@ -66,35 +60,26 @@ public class ScotlandYardModel extends ScotlandYard {
     protected void play(MoveTicket move) {
         colourGamePlayerMap.get(move.colour).removeOrAddTicket(move.ticket, -1);
         colourGamePlayerMap.get(move.colour).setLocation(move.target);
-        if(Colour.Black !=  move.colour) {
-            colourGamePlayerMap.get(Colour.Black).removeOrAddTicket(move.ticket, +1);
+        if(Colour.Black ==  move.colour) {
+            roundCount++;
+            gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation());
+            notifyAllSpectators(new MoveTicket(Colour.Black,getPlayerLocation(Colour.Black),move.ticket));
         }
         else {
-            roundCount++;//todo check this in rulebook,tests say roundcount should go up twice if doublemove is used
-            gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation());
-        }
-        MoveTicket mrXLastKnownLocationTicket = new MoveTicket(Colour.Black,getPlayerLocation(Colour.Black),move.ticket);
-        if(move.colour == Colour.Black){
-            notifyAllSpectators(mrXLastKnownLocationTicket);
-        }else {
+            colourGamePlayerMap.get(Colour.Black).removeOrAddTicket(move.ticket, +1);
             notifyAllSpectators(move);
         }
-        areTicketMapsEmpty();
     }
 
     @Override
     protected void play(MoveDouble move) {
         notifyAllSpectators(move);
-
-        for(int i=0;i <2;i++){
-            play(move.moves.get(i));
-        }
+        play(move.moves.get(0));
+        play(move.moves.get(1));
     }
 
     @Override
-    protected void play(MovePass move) {//todo no idea what this is
-        //todo only detectives can do a passmove, if detective does one game is over
-        //roundCount++;
+    protected void play(MovePass move) {
         notifyAllSpectators(move);
     }
 
@@ -156,18 +141,17 @@ public class ScotlandYardModel extends ScotlandYard {
         else {
             return colourGamePlayerMap.get(colour).getLocation();
         }
-
     }
 
     @Override
     public int getPlayerTickets(Colour colour, Ticket ticket) {
         return colourGamePlayerMap.get(colour).getNumberOfTicket(ticket);
-
     }
 
     @Override
     public boolean isGameOver() {
         if(!isReady()) return false;
+
         if(areTicketMapsEmpty())return true;
         if(roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) return true;
         if(getPlayerMove(Colour.Black) == null)return true;
