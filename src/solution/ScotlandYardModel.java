@@ -22,10 +22,8 @@ public class ScotlandYardModel extends ScotlandYard {
 
     public ScotlandYardModel(int numberOfDetectives, List<Boolean> rounds, String graphFileName) throws IOException {
         super(numberOfDetectives, rounds, graphFileName);
-
         this.numberOfDetectives = numberOfDetectives;
         this.rounds = rounds;
-
         colourGamePlayerMap = new LinkedHashMap<Colour, GamePlayer>();
         graph = new ScotlandYardGraphReader().readGraph(graphFileName);
         gamePlayerMoveUtilities = new GamePlayerMoveUtilities(this);

@@ -104,8 +104,7 @@ public class GamePlayerMoveUtilities {
     }
 
     protected List<Move> allPossibleMoves (Colour colour, int location, List<Move> moveList, Map<Ticket,Integer> ticketMap) { //todo this was buggy so i changed it, delete this comment when read
-        //todo edge<X,Y? correct?
-        for (Edge<Integer,Route> edge : getConnectedEdges(location)) {
+        for (Edge edge : getConnectedEdges(location)) {
             if(location == getSource(edge)) {
                 moveList.add(new MoveTicket(colour,getTarget(edge),getTicket(edge)));
                 if (!(edge.data() == Route.Boat) && ticketMap.get(Ticket.SecretMove) != 0){
@@ -119,7 +118,6 @@ public class GamePlayerMoveUtilities {
                 }
             }
         }
-
         return moveList;
     }
 
@@ -171,7 +169,7 @@ public class GamePlayerMoveUtilities {
     }
 
 
-    //other functions
+    /**returns a Colour -> Gameplayer map with black as the first colour **/
     public Map<Colour, GamePlayer> getSortedMap(){
         Map<Colour, GamePlayer> sortedColourGamePlayerMap = new LinkedHashMap<Colour, GamePlayer>();
 
@@ -185,15 +183,16 @@ public class GamePlayerMoveUtilities {
         return sortedColourGamePlayerMap;
     }
 
+    /** adds the location to mrXLocations if the current round is true **/
     public void mrXLocationUpdateCheck (int location){
         if(mScotlandYard.getRounds().get(mScotlandYard.getRoundCount())) {
             mScotlandYard.getMrXLocations().add(location);
         }
     }
 
+    /**returns player of this colour**/
     public GamePlayer findPlayer (Colour colour) {
         return mScotlandYard.getColourGamePlayerMap().get(colour);
     }
 
 }
-
