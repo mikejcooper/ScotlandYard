@@ -109,7 +109,7 @@ public class ScotlandYardModel extends ScotlandYard {
                 colourGamePlayerMap = gamePlayerMoveUtilities.getSortedMap();
                 gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation());
             }
-                return true;
+            return true;
         }
     }
 
@@ -121,7 +121,7 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     public Set<Colour> getWinningPlayers() {
         Set<Colour> winningPlayers = new HashSet<Colour>();
-        if(areTicketMapsEmpty() || (roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) || areAllDetectivesStuck()) {
+        if((roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) || areAllDetectivesStuck()) {
             winningPlayers.add(Colour.Black);
         }
         if(getPlayerMove(Colour.Black) == null || isMrXCaught()){
@@ -150,10 +150,11 @@ public class ScotlandYardModel extends ScotlandYard {
     public boolean isGameOver() {
         if(!isReady()) return false;
 
-        if(areTicketMapsEmpty())return true;
+        if(areTicketMapsEmpty()) return true;
         if(roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) return true;
-        if(getPlayerMove(Colour.Black) == null)return true;
-        if(isMrXCaught())return true;
+        if(getPlayerMove(Colour.Black) == null) return true;
+        if(isMrXCaught()) return true;
+
         return false;
     }
 
@@ -214,7 +215,6 @@ public class ScotlandYardModel extends ScotlandYard {
         return false;
     }
 
-    //todo needed for test but highly inefficient and unnecessary
     private boolean areAllDetectivesStuck(){
         for(Colour colour : colourGamePlayerMap.keySet()){
             if(colour != Colour.Black && getPlayerMove(colour) != null) return false;
