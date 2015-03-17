@@ -1,29 +1,19 @@
 package solution.Controller.TicketPanel;
 
-import View.TicketPanel.DetectiveJPanel;
-import View.TicketPanel.MrXJPanel;
-
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by MikeCooper on 17/03/15.
  */
-public class ActionListenerBuffer {
+public class ActionListenerBuffer implements ActionListener {
 
 
-    protected DetectiveJPanel detectiveJPanel;
-    protected MrXJPanel mrXJPanel;
-
-    public void actionHandler (ActionEvent e) {
+    @Override
+    public void actionPerformed(ActionEvent e) {
         Object source = e.getSource();
 
-       
-
+//        if(e == taxiTicketButton)
 
     }
-
-
-
-
-
 }

@@ -1,4 +1,4 @@
-package View.TicketPanel;
+package solution.View.TicketPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,13 +14,12 @@ public class TicketJPanel extends JPanel {
     protected DetectiveJPanel[] detectives;
     protected MrXJPanel mrX;
 
-
-
     public TicketJPanel(String[] args) {
 
         detectives = new DetectiveJPanel[5];
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
+
         readInput(args);
         addToJPanel();
 
@@ -44,8 +43,10 @@ public class TicketJPanel extends JPanel {
     private void addToJPanel() {
         int x = 0;
         for (DetectiveJPanel detective : detectives) {
-            setGridLayout(x,0,detective,0);
-            x++;
+            if (detective != null) {
+                setGridLayout(x, 0, detective, 0);
+                x++;
+            }
         }
 
         if(mrX != null){
@@ -55,7 +56,6 @@ public class TicketJPanel extends JPanel {
 
 
     protected void setGridLayout(int x, int y, Component component, int buffer) {
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = x;
         gbc.gridy = y;
         gbc.insets = new Insets(0,buffer,0,buffer);

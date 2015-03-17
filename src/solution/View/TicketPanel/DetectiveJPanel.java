@@ -1,6 +1,4 @@
-package View.TicketPanel;
-
-import View.View;
+package solution.View.TicketPanel;
 
 /**
  * Created by MikeCooper on 16/03/15.

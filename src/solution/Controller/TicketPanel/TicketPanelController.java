@@ -1,16 +1,16 @@
 package solution.Controller.TicketPanel;
 
-import View.TicketPanel.DetectiveJPanel;
-import View.TicketPanel.MrXJPanel;
-import View.View;
+import solution.Controller.Interfaces.ActionListenerInterface;
+import solution.View.TicketPanel.DetectiveJPanel;
+import solution.View.View;
 import solution.Model.ScotlandYardModel;
 
-import javax.swing.*;
+import java.awt.event.ActionListener;
 
 /**
  * Created by MikeCooper on 16/03/15.
  */
-public class TicketPanelController {
+public class TicketPanelController implements ActionListenerInterface {
 
     private ScotlandYardModel theModel;
     private View theView;
@@ -23,5 +23,18 @@ public class TicketPanelController {
     }
 
 
+    @Override
+    public ActionListener taxiButton() {
+        return null;
+    }
 
+    @Override
+    public ActionListener busButton() {
+        return null;
+    }
+
+    @Override
+    public ActionListener undergroundButton() {
+        return null;
+    }
 }

@@ -1,7 +1,7 @@
-package View;
+package solution.View;
 
-import View.MapPanel.MapJPanel;
-import View.TicketPanel.TicketJPanel;
+import solution.View.MapPanel.MapJPanel;
+import solution.View.TicketPanel.TicketJPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,9 +25,10 @@ public class View extends JFrame {
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
+
         setJFrameLayout();
 
-        pack();
+        //pack();
 
         setVisible(true);
     }
@@ -51,4 +52,6 @@ public class View extends JFrame {
         gbc.gridy = 1;
         add(ticketJPanel, gbc);
     }
+
+
 }

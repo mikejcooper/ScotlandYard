@@ -1,4 +1,4 @@
-package View.MapPanel;
+package solution.View.MapPanel;
 
 import javax.swing.*;
 

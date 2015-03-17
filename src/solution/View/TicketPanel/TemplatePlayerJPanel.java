@@ -1,7 +1,6 @@
-package View.TicketPanel;
+package solution.View.TicketPanel;
 
-import View.View;
-import scotlandyard.Graph;
+import solution.Controller.TicketPanel.ActionListenerBuffer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,6 +25,7 @@ abstract class TemplatePlayerJPanel extends JPanel {
         //setBorder(BorderFactory.createTitledBorder(playerName));
 
         PlayerName = new JLabel(playerName);
+
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         setJPanelLayout();
@@ -54,6 +54,9 @@ abstract class TemplatePlayerJPanel extends JPanel {
         add(component, gbc);
     }
 
+
+
+
     public void setTaxiTicketValue (String value){
         TaxiTicketValue.setText(value);
     }
@@ -74,8 +77,10 @@ abstract class TemplatePlayerJPanel extends JPanel {
         BusTicket.addActionListener(actionListener);
     }
 
-    public void addUndergroundAL (ActionListener actionListener){
-        UndergroundTicket.addActionListener(actionListener);
+    public void addUndergroundAL (){
+        UndergroundTicket.addActionListener(new ActionListenerBuffer());
+
+        ////SOLUTION???
     }
 
 

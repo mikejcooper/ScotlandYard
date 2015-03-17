@@ -1,6 +1,4 @@
-package View.TicketPanel;
-
-import View.View;
+package solution.View.TicketPanel;
 
 import javax.swing.*;
 import java.awt.*;
