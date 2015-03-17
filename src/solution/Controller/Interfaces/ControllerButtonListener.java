@@ -5,11 +5,11 @@ package solution.Controller.Interfaces;
  */
 public interface ControllerButtonListener {
 
-    public void taxiTicketUsed();
-    public void busTicketUsed();
-    public void UndergroundTicketUsed();
-    public void doubleMoveTicketUsed();
-    public void secretMoveTicketUsed();
+    public void taxiTicketUsed(String playerName);
+    public void busTicketUsed(String playerName);
+    public void UndergroundTicketUsed(String playerName);
+    public void doubleMoveTicketUsed(String playerName);
+    public void secretMoveTicketUsed(String playerName);
 
 
 }

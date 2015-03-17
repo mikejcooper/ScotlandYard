@@ -18,28 +18,26 @@ public class Controller implements ControllerButtonListener {
 
 
     @Override
-    public void taxiTicketUsed() {
-        System.out.println("Received at Controller taxi");
+    public void taxiTicketUsed(String playerName) {
+        System.out.println("Received at Controller taxi " + playerName);
     }
 
     @Override
-    public void busTicketUsed() {
-        System.out.println("Received at Controller bus");
+    public void busTicketUsed(String playerName) {
+        System.out.println("Received at Controller bus " + playerName);
     }
 
     @Override
-    public void UndergroundTicketUsed() {
-        System.out.println("Received at Controller underground");
+    public void UndergroundTicketUsed(String playerName) { System.out.println("Received at Controller underground " + playerName); }
+
+    @Override
+    public void doubleMoveTicketUsed(String playerName) {
+        System.out.println("Received at Controller doublemove " + playerName);
     }
 
     @Override
-    public void doubleMoveTicketUsed() {
-        System.out.println("Received at Controller doublemove");
-    }
-
-    @Override
-    public void secretMoveTicketUsed() {
-        System.out.println("Received at Controller secret");
+    public void secretMoveTicketUsed(String playerName) {
+        System.out.println("Received at Controller secret " + playerName);
     }
 
 

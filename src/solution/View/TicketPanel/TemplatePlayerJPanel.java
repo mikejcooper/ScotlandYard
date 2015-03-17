@@ -13,7 +13,8 @@ import java.awt.event.ActionListener;
  */
 public abstract class TemplatePlayerJPanel extends JPanel implements ActionListener {
 
-
+        //todo added string playername, to be able to identify object easily
+        protected String playerName;
         protected GridBagConstraints gbc;
         protected JLabel PlayerName = new JLabel("Initialise in Constructor");
         protected JButton TaxiTicket = new JButton("Taxi");
@@ -23,8 +24,11 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         protected JLabel BusTicketValue = new JLabel("5");
         protected JLabel UndergroundTicketValue = new JLabel("5");
 
+
     public TemplatePlayerJPanel(String playerName) {
         //setBorder(BorderFactory.createTitledBorder(playerName));
+
+        this.playerName = playerName;
 
         PlayerName = new JLabel(playerName);
 

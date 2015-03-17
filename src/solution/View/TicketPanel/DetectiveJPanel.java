@@ -21,15 +21,15 @@ public class DetectiveJPanel extends TemplatePlayerJPanel {
 
         if(source == TaxiTicket){
             setTaxiTicketValue("" + (Integer.parseInt(TaxiTicketValue.getText())-1));
-            controllerButtonListener.taxiTicketUsed();
+            controllerButtonListener.taxiTicketUsed(playerName);
         }
         if(source == BusTicket){
             setBusTicketValue("" + (Integer.parseInt(BusTicketValue.getText())-1));
-            controllerButtonListener.busTicketUsed();
+            controllerButtonListener.busTicketUsed(playerName);
         }
         if(source == UndergroundTicket){
             setUndergroundTicketValue("" + (Integer.parseInt(UndergroundTicketValue.getText())-1));
-            controllerButtonListener.UndergroundTicketUsed();
+            controllerButtonListener.UndergroundTicketUsed(playerName);
         }
     }
 
