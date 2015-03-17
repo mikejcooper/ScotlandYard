@@ -2,11 +2,10 @@ package solution.View.TicketPanel;
 
 
 
-import solution.Controller.Interfaces.PlayerButtonListener;
+import solution.Controller.Interfaces.ControllerButtonListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -20,11 +19,9 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         protected JButton TaxiTicket = new JButton("Taxi");
         protected JButton BusTicket = new JButton("Bus");
         protected JButton UndergroundTicket = new JButton("Underground");
-        protected JLabel TaxiTicketValue = new JLabel("0");
-        protected JLabel BusTicketValue = new JLabel("0");
-        protected JLabel UndergroundTicketValue = new JLabel("0");
-
-    protected PlayerButtonListener playerButtonListener;
+        protected JLabel TaxiTicketValue = new JLabel("5");
+        protected JLabel BusTicketValue = new JLabel("5");
+        protected JLabel UndergroundTicketValue = new JLabel("5");
 
     public TemplatePlayerJPanel(String playerName) {
         //setBorder(BorderFactory.createTitledBorder(playerName));

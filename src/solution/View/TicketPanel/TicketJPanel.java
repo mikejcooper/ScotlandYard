@@ -1,7 +1,6 @@
 package solution.View.TicketPanel;
 
 import solution.Controller.Controller;
-import solution.Controller.Interfaces.MrXButtonListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,8 +21,9 @@ public class TicketJPanel extends JPanel {
         detectives = new DetectiveJPanel[5];
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
+        //todo only testing.
+        String[] args = {"Black","While","green","Blue"};
 
-        String[] args = {"black","While","green","Blue"};
         readInput(args);
         addToJPanel();
     }
@@ -73,7 +73,7 @@ public class TicketJPanel extends JPanel {
             }
         }
         if(mrX != null){
-            mrX.buttonListener((MrXButtonListener) controller);
+            mrX.buttonListener(controller);
         }
     }
 }

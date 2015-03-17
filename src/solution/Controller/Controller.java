@@ -1,36 +1,45 @@
 package solution.Controller;
-
-import solution.Controller.Interfaces.MrXButtonListener;
-import solution.Controller.Interfaces.PlayerButtonListener;
+import solution.Controller.Interfaces.ControllerButtonListener;
+import solution.Model.ScotlandYardModel;
 
 /**
  * Created by MikeCooper on 17/03/15.
  */
-public class Controller implements PlayerButtonListener,MrXButtonListener {
+public class Controller implements ControllerButtonListener {
+
+
+    ScotlandYardModel theModel;
+
+    //input the model
+    public Controller (){
+        this.theModel = theModel;
+        //todo make model be accepted in constructor
+    }
+
 
     @Override
     public void taxiTicketUsed() {
-        System.out.print("Received at Controller");
+        System.out.println("Received at Controller taxi");
     }
 
     @Override
     public void busTicketUsed() {
-        System.out.print("Received at Controller");
+        System.out.println("Received at Controller bus");
     }
 
     @Override
     public void UndergroundTicketUsed() {
-        System.out.print("Received at Controller");
+        System.out.println("Received at Controller underground");
     }
 
     @Override
     public void doubleMoveTicketUsed() {
-        System.out.print("Received at Controller");
+        System.out.println("Received at Controller doublemove");
     }
 
     @Override
     public void secretMoveTicketUsed() {
-        System.out.print("Received at Controller");
+        System.out.println("Received at Controller secret");
     }
 
 

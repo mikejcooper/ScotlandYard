@@ -1,7 +1,6 @@
 package solution.View.TicketPanel;
 
-import solution.Controller.Interfaces.MrXButtonListener;
-import solution.Controller.Interfaces.PlayerButtonListener;
+import solution.Controller.Interfaces.ControllerButtonListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,15 +9,15 @@ import java.awt.event.ActionEvent;
 /**
  * Created by MikeCooper on 16/03/15.
  */
-public class MrXJPanel extends DetectiveJPanel {
+public class MrXJPanel extends TemplatePlayerJPanel {
+
+        protected ControllerButtonListener controllerButtonListener;
 
         private JButton SecretMoveTicket = new JButton("Secret Move");
         private JButton DoubleMoveTicket = new JButton("DoubleMove");
-        private JLabel SecretMoveTicketValue = new JLabel("0");
-        private JLabel DoubleMoveTicketValue = new JLabel("0");
+        private JLabel SecretMoveTicketValue = new JLabel("5");
+        private JLabel DoubleMoveTicketValue = new JLabel("5");
         private JLabel SpecialMovesLabel = new JLabel("Special Moves (MrX)");
-
-        private MrXButtonListener mrXButtonListener;
 
     public MrXJPanel(String playerName) {
         super(playerName);
@@ -54,22 +53,32 @@ public class MrXJPanel extends DetectiveJPanel {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        super.actionPerformed(e);
-
         Object source = e.getSource();
 
+        if(source == TaxiTicket){
+            setTaxiTicketValue("" + (Integer.parseInt(TaxiTicketValue.getText())-1));
+            controllerButtonListener.taxiTicketUsed();
+        }
+        if(source == BusTicket){
+            setBusTicketValue("" + (Integer.parseInt(BusTicketValue.getText())-1));
+            controllerButtonListener.busTicketUsed();
+        }
+        if(source == UndergroundTicket){
+            setUndergroundTicketValue("" + (Integer.parseInt(UndergroundTicketValue.getText())-1));
+            controllerButtonListener.UndergroundTicketUsed();
+        }
         if(source == SecretMoveTicket){
-            setSecretMoveTicketValue("" + (Integer.parseInt(SecretMoveTicketValue.getText())+1));
+            setSecretMoveTicketValue("" + (Integer.parseInt(SecretMoveTicketValue.getText())-1));
+            controllerButtonListener.secretMoveTicketUsed();
         }
         if(source == DoubleMoveTicket){
-            setDoubleMoveTicketValue("" + (Integer.parseInt(DoubleMoveTicketValue.getText())+1));
+            setDoubleMoveTicketValue("" + (Integer.parseInt(DoubleMoveTicketValue.getText())-1));
+            controllerButtonListener.doubleMoveTicketUsed();
         }
     }
 
-    //pass in controller, allows controller to tell view when model has changed, therefore view should also change.
-    public void buttonListener(MrXButtonListener mrXButtonListener){
-        this.mrXButtonListener = mrXButtonListener;
+
+    public void buttonListener(ControllerButtonListener controllerButtonListener){
+        this.controllerButtonListener = controllerButtonListener;
     }
-
-
 }

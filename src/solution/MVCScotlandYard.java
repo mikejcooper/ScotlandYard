@@ -18,6 +18,10 @@ public class MVCScotlandYard {
 
 
         Controller theController = new Controller();
+
+
+
+
         theView.setControllerPrivileges(theController);
 
     }
@@ -25,8 +29,5 @@ public class MVCScotlandYard {
 
 
     public void runApp() {
-
-
-
     }
 }
