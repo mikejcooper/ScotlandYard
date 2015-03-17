@@ -1,8 +1,7 @@
-package solution.GamePlayer;
+package solution.Model.GamePlayer;
 
 import scotlandyard.*;
-import solution.GamePlayer.GamePlayer;
-import solution.ScotlandYardModel;
+import solution.Model.ScotlandYardModel;
 
 import java.util.*;
 

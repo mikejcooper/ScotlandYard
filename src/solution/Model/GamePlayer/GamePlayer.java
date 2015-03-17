@@ -1,11 +1,7 @@
-package solution.GamePlayer;
+package solution.Model.GamePlayer;
 
 import scotlandyard.*;
-import solution.ScotlandYardModel;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**

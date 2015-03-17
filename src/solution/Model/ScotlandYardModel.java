@@ -1,8 +1,8 @@
-package solution;
+package solution.Model;
 
 import scotlandyard.*;
-import solution.GamePlayer.GamePlayer;
-import solution.GamePlayer.GamePlayerMoveUtilities;
+import solution.Model.GamePlayer.GamePlayer;
+import solution.Model.GamePlayer.GamePlayerMoveUtilities;
 
 import java.io.IOException;
 import java.util.*;
@@ -56,6 +56,7 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override//removes ticket and adds to mr x, location is updated
     protected void play(MoveTicket move) {
+        //todo doubleMove tocken removal
         colourGamePlayerMap.get(move.colour).removeOrAddTicket(move.ticket, -1);
         colourGamePlayerMap.get(move.colour).setLocation(move.target);
         if(Colour.Black ==  move.colour) {
@@ -109,7 +110,7 @@ public class ScotlandYardModel extends ScotlandYard {
                 colourGamePlayerMap = gamePlayerMoveUtilities.getSortedMap();
                 gamePlayerMoveUtilities.mrXLocationUpdateCheck(gamePlayerMoveUtilities.findPlayer(Colour.Black).getLocation());
             }
-                return true;
+            return true;
         }
     }
 
@@ -121,7 +122,7 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     public Set<Colour> getWinningPlayers() {
         Set<Colour> winningPlayers = new HashSet<Colour>();
-        if(areTicketMapsEmpty() || (roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) || areAllDetectivesStuck()) {
+        if((roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) || areAllDetectivesStuck()) {
             winningPlayers.add(Colour.Black);
         }
         if(getPlayerMove(Colour.Black) == null || isMrXCaught()){
@@ -150,10 +151,11 @@ public class ScotlandYardModel extends ScotlandYard {
     public boolean isGameOver() {
         if(!isReady()) return false;
 
-        if(areTicketMapsEmpty())return true;
+        if(areTicketMapsEmpty()) return true;
         if(roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) return true;
-        if(getPlayerMove(Colour.Black) == null)return true;
-        if(isMrXCaught())return true;
+        if(getPlayerMove(Colour.Black) == null) return true;
+        if(isMrXCaught()) return true;
+
         return false;
     }
 
@@ -214,7 +216,6 @@ public class ScotlandYardModel extends ScotlandYard {
         return false;
     }
 
-    //todo needed for test but highly inefficient and unnecessary
     private boolean areAllDetectivesStuck(){
         for(Colour colour : colourGamePlayerMap.keySet()){
             if(colour != Colour.Black && getPlayerMove(colour) != null) return false;
