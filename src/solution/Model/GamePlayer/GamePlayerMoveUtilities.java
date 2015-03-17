@@ -168,7 +168,7 @@ public class GamePlayerMoveUtilities {
     }
 
 
-    /**returns a Colour -> Gameplayer map with black as the first colour **/
+    /**returns a <Colour -> gamePlayer> map with black as the first colour **/
     public Map<Colour, GamePlayer> getSortedMap(){
         Map<Colour, GamePlayer> sortedColourGamePlayerMap = new LinkedHashMap<Colour, GamePlayer>();
 
