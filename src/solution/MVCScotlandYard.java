@@ -1,5 +1,7 @@
 package solution;
 
+import scotlandyard.ScotlandYard;
+import solution.Controller.Controller;
 import solution.View.View;
 import solution.Model.ScotlandYardModel;
 
@@ -10,18 +12,20 @@ public class MVCScotlandYard {
 
 
     public static void main(String[] args) {
-        new View(args);
+
+        //this.theModel = ScotlandYardModel();
+        View theView = new View();
 
 
+        Controller theController = new Controller();
+        theView.setControllerPrivileges(theController);
 
     }
 
 
 
     public void runApp() {
-        ScotlandYardModel theModel;
-        View theView;
-        //TicketPanelController theController = new TicketPanelController(theModel,theView);
+
 
 
     }

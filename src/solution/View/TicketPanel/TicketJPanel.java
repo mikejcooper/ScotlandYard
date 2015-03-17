@@ -1,5 +1,8 @@
 package solution.View.TicketPanel;
 
+import solution.Controller.Controller;
+import solution.Controller.Interfaces.MrXButtonListener;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -14,16 +17,15 @@ public class TicketJPanel extends JPanel {
     protected DetectiveJPanel[] detectives;
     protected MrXJPanel mrX;
 
-    public TicketJPanel(String[] args) {
+    public TicketJPanel() {
 
         detectives = new DetectiveJPanel[5];
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
 
+        String[] args = {"black","While","green","Blue"};
         readInput(args);
         addToJPanel();
-
-
     }
 
     //todo better way to assure mrX is the last person to be added?
@@ -48,7 +50,6 @@ public class TicketJPanel extends JPanel {
                 x++;
             }
         }
-
         if(mrX != null){
             setGridLayout(x,0,mrX,0);
         }
@@ -64,4 +65,15 @@ public class TicketJPanel extends JPanel {
     }
 
 
+
+    public void setControllerPrivileges(Controller controller) {
+        for (DetectiveJPanel detective : detectives) {
+            if (detective != null) {
+                detective.buttonListener(controller);
+            }
+        }
+        if(mrX != null){
+            mrX.buttonListener((MrXButtonListener) controller);
+        }
+    }
 }

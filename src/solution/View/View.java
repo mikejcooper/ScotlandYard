@@ -1,6 +1,9 @@
 package solution.View;
 
+import solution.Controller.Controller;
 import solution.View.MapPanel.MapJPanel;
+import solution.View.TicketPanel.DetectiveJPanel;
+import solution.View.TicketPanel.TemplatePlayerJPanel;
 import solution.View.TicketPanel.TicketJPanel;
 
 import javax.swing.*;
@@ -16,11 +19,11 @@ public class View extends JFrame {
     protected MapJPanel mapJPanel;
     protected TicketJPanel ticketJPanel;
 
-    public View (String[] args) {
+    public View () {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1300, 800);
 
-        ticketJPanel = new TicketJPanel(args);
+        ticketJPanel = new TicketJPanel();
         mapJPanel = new MapJPanel();
 
         gbc = new GridBagConstraints();
@@ -52,6 +55,13 @@ public class View extends JFrame {
         gbc.gridy = 1;
         add(ticketJPanel, gbc);
     }
+
+    public void setControllerPrivileges(Controller controller) {
+        //allow controller to access certain parts -
+        ticketJPanel.setControllerPrivileges(controller);
+    }
+
+
 
 
 }

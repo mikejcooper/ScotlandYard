@@ -1,15 +1,18 @@
 package solution.View.TicketPanel;
 
-import solution.Controller.TicketPanel.ActionListenerBuffer;
+
+
+import solution.Controller.Interfaces.PlayerButtonListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
  * Created by MikeCooper on 16/03/15.
  */
-abstract class TemplatePlayerJPanel extends JPanel {
+public abstract class TemplatePlayerJPanel extends JPanel implements ActionListener {
 
 
         protected GridBagConstraints gbc;
@@ -21,6 +24,8 @@ abstract class TemplatePlayerJPanel extends JPanel {
         protected JLabel BusTicketValue = new JLabel("0");
         protected JLabel UndergroundTicketValue = new JLabel("0");
 
+    protected PlayerButtonListener playerButtonListener;
+
     public TemplatePlayerJPanel(String playerName) {
         //setBorder(BorderFactory.createTitledBorder(playerName));
 
@@ -29,6 +34,11 @@ abstract class TemplatePlayerJPanel extends JPanel {
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         setJPanelLayout();
+
+
+        TaxiTicket.addActionListener(this);
+        BusTicket.addActionListener(this);
+        UndergroundTicket.addActionListener(this);
     }
 
     private void setJPanelLayout() {
@@ -54,9 +64,6 @@ abstract class TemplatePlayerJPanel extends JPanel {
         add(component, gbc);
     }
 
-
-
-
     public void setTaxiTicketValue (String value){
         TaxiTicketValue.setText(value);
     }
@@ -68,23 +75,6 @@ abstract class TemplatePlayerJPanel extends JPanel {
     public void setUndergroundTicketValue (String value){
         UndergroundTicketValue.setText(value);
     }
-
-    public void addTaxiAL (ActionListener actionListener){
-        TaxiTicket.addActionListener(actionListener);
-    }
-
-    public void addBusAL (ActionListener actionListener){
-        BusTicket.addActionListener(actionListener);
-    }
-
-    public void addUndergroundAL (){
-        UndergroundTicket.addActionListener(new ActionListenerBuffer());
-
-        ////SOLUTION???
-    }
-
-
-
 
 }
 
