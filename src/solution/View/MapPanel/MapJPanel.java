@@ -2,6 +2,7 @@ package solution.View.MapPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.*;
 import java.util.Set;
@@ -12,7 +13,7 @@ import java.util.Set;
 public class MapJPanel extends JPanel {
 
 
-    private Image image;
+    private BufferedImage image;
     private Set<ButtonHolder> buttons;
 
     public MapJPanel() {
@@ -22,10 +23,9 @@ public class MapJPanel extends JPanel {
             System.exit(1);
         }
         this.buttons = positionReader.getButtonSet();
-        setPreferredSize(new Dimension(1018,809));
+        setPreferredSize(new Dimension(500,400));
         URL u = this.getClass().getResource("map.jpg");
         ImageIcon icon = new ImageIcon(u);
-        image = icon.getImage();
         add(new JLabel(icon));
 
     }
@@ -38,4 +38,5 @@ public class MapJPanel extends JPanel {
             g.fillOval(buttonHolder.getxCoordinate(),buttonHolder.getyCoordinate(),10,10);
         }
     }
+
 }
