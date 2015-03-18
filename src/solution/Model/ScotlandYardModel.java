@@ -73,6 +73,7 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     protected void play(MoveDouble move) {
         notifyAllSpectators(move);
+        colourGamePlayerMap.get(move.colour).removeOrAddTicket(Ticket.DoubleMove,-1);
         play(move.moves.get(0));
         play(move.moves.get(1));
     }
