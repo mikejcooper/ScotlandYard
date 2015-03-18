@@ -56,7 +56,6 @@ public class ScotlandYardModel extends ScotlandYard {
 
     @Override//removes ticket and adds to mr x, location is updated
     protected void play(MoveTicket move) {
-        //todo doubleMove tocken removal
         colourGamePlayerMap.get(move.colour).removeOrAddTicket(move.ticket, -1);
         colourGamePlayerMap.get(move.colour).setLocation(move.target);
         if(Colour.Black ==  move.colour) {
