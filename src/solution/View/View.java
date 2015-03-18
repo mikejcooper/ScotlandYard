@@ -22,6 +22,7 @@ public class View extends JFrame {
     public View () {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1300, 800);
+        setVisible(true);
 
         ticketJPanel = new TicketJPanel();
         mapJPanel = new MapJPanel();
