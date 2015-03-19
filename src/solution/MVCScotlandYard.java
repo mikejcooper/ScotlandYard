@@ -24,11 +24,13 @@ public class MVCScotlandYard {
         String graphFileName = "graph.txt";
 
         ScotlandYardModel theModel = (ScotlandYardModel) new InitialiseGame(numberOfDetectives,graphFileName).game;
-
-
         View theView = new View();
         Controller theController = new Controller(theModel, theView);
-        theView.setControllerPrivileges(theController);
+
+
+
+        //in the controller??
+        //theView.setControllerPrivileges(theController);
 
 
 

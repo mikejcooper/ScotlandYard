@@ -19,11 +19,19 @@ public class Controller implements ControllerButtonListener {
         this.theModel = theModel;
         this.theView = theView;
         this.theModelController = new ModelController(theModel,theView);
+        theView.setControllerPrivileges(this);
     }
 
 
     @Override
     public void taxiTicketUsed(String playerName) {
+        if (playerName.equals("Black")){
+
+        }
+        else {
+            //take turn
+            //
+        }
         System.out.println("Received at Controller taxi " + playerName);
     }
 

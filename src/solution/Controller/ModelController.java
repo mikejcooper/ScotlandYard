@@ -21,8 +21,14 @@ public class ModelController {
     }
 
     private void initialiseView () {
-        theView.ticketJPanel.initialisePanel(theModel.getPlayers(),theModel.getColourGamePlayerMap());
-        ///^^yay or naay?
+        for (Colour player : theModel.getPlayers()) {
+            theView.addPlayer(player, theModel.getColourGamePlayerMap().get(player).getTickets());
+        }
+        checkTurn();
+    }
+
+    public void checkTurn() {
+        theView.setCurrentPlayer(theModel.getCurrentPlayer());
     }
 
 
