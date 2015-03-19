@@ -30,21 +30,20 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         protected ControllerButtonListener controllerButtonListener;
 
 
-    public TemplatePlayerJPanel(String playerName, Map<Ticket,Integer> tickets) {
+    public TemplatePlayerJPanel(String playerName) {
         //setBorder(BorderFactory.createTitledBorder(playerName));
         PlayerName = new JLabel(playerName);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
         setJPanelLayout();
-        setTicketValue(tickets);
 
         TaxiTicket.addActionListener(this);
         BusTicket.addActionListener(this);
         UndergroundTicket.addActionListener(this);
     }
 
-    private void setTicketValue(Map<Ticket, Integer> tickets) {
+    public void setTicketValue(Map<Ticket,Integer> tickets) {
         setTaxiTicketValue(tickets.get(Ticket.Taxi).toString());
         setBusTicketValue(tickets.get(Ticket.Bus).toString());
         setUndergroundTicketValue(tickets.get(Ticket.Underground).toString());

@@ -193,6 +193,18 @@ public class ScotlandYardModel extends ScotlandYard {
         return mrXLocations;
     }
 
+    public List<Move> getValidMoves (Colour colour) {
+        return validMoves(colour);
+    }
+
+    public void makeMove(Move move){
+        play(move);
+    }
+
+    public void getNextPlayer() {
+        nextPlayer();
+    }
+
     private boolean areTicketMapsEmpty(){
         for(Colour colour : colourGamePlayerMap.keySet()){
             if(!isMapEmpty(colour) && colour != Colour.Black){

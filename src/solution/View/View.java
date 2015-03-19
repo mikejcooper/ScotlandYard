@@ -3,16 +3,12 @@ package solution.View;
 import scotlandyard.Colour;
 import scotlandyard.Ticket;
 import solution.Controller.Controller;
-import solution.Model.GamePlayer.GamePlayer;
 import solution.View.MapPanel.MapJPanel;
-import solution.View.TicketPanel.DetectiveJPanel;
-import solution.View.TicketPanel.TemplatePlayerJPanel;
 import solution.View.TicketPanel.TicketJPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by MikeCooper on 16/03/15.
@@ -23,14 +19,15 @@ public class View extends JFrame {
 
     private MapJPanel mapJPanel;
     private TicketJPanel ticketJPanel;
+    private TextEditJFrame textEditJFrame;
 
     public View () {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1300, 800);
-        setVisible(true);
 
         ticketJPanel = new TicketJPanel();
         mapJPanel = new MapJPanel();
+        //textEditJFrame = new TextEditJFrame();
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -74,6 +71,10 @@ public class View extends JFrame {
     public void setCurrentPlayer(Colour player){
         ticketJPanel.setCurrentPlayer(player);
 
+    }
+
+    public void updateTicketValues(Colour player, Map<Ticket,Integer> tickets) {
+        ticketJPanel.updateTickets(player, tickets);
     }
 
 

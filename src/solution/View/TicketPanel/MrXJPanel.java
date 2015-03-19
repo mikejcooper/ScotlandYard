@@ -1,5 +1,6 @@
 package solution.View.TicketPanel;
 
+import scotlandyard.Colour;
 import scotlandyard.Ticket;
 import solution.Controller.Interfaces.ControllerButtonListener;
 
@@ -19,16 +20,17 @@ public class MrXJPanel extends TemplatePlayerJPanel {
         private JLabel DoubleMoveTicketValue = new JLabel("5");
         private JLabel SpecialMovesLabel = new JLabel("Special Moves (MrX)");
 
-    public MrXJPanel(String playerName, Map<Ticket, Integer> tickets) {
-        super(playerName,tickets);
+    public MrXJPanel(String playerName) {
+        super(playerName);
         setJPanelLayout();
-        setTicketValue(tickets);
 
         SecretMoveTicket.addActionListener(this);
         DoubleMoveTicket.addActionListener(this);
     }
 
-    private void setTicketValue(Map<Ticket, Integer> tickets) {
+    @Override
+    public void setTicketValue(Map<Ticket, Integer> tickets) {
+        super.setTicketValue(tickets);
         setDoubleMoveTicketValue(tickets.get(Ticket.DoubleMove).toString());
         setSecretMoveTicketValue(tickets.get(Ticket.SecretMove).toString());
     }
@@ -82,8 +84,8 @@ public class MrXJPanel extends TemplatePlayerJPanel {
             SecretMoveTicket.setEnabled(b);
         }
         else {
-            DoubleMoveTicket.setEnabled(!b);
-            SecretMoveTicket.setEnabled(!b);
+            DoubleMoveTicket.setEnabled(b);
+            SecretMoveTicket.setEnabled(b);
         }
 
     }
