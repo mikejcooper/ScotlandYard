@@ -1,5 +1,8 @@
 package solution.Controller;
+import scotlandyard.Colour;
+import scotlandyard.MoveTicket;
 import scotlandyard.ScotlandYard;
+import scotlandyard.Ticket;
 import solution.Controller.Interfaces.ControllerButtonListener;
 import solution.Model.ScotlandYardModel;
 import solution.View.View;
@@ -29,9 +32,20 @@ public class Controller implements ControllerButtonListener {
 
         }
         else {
-            //take turn
-            //
+            //validMoves for current player
+            //wait - Ticket select
+            //validMovesForTicket
+            //wait - map button.
+            //play (move ticket)
+            //update current location
+            //update current player
         }
+        MoveTicket move = new MoveTicket(Colour.Blue,2, Ticket.Bus);
+        theModelController.playMove(move);
+        theModelController.updateTicketValues();
+        theModel.getNextPlayer();
+        theModelController.checkTurn();
+
         System.out.println("Received at Controller taxi " + playerName);
     }
 

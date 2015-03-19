@@ -30,12 +30,26 @@ public class TicketJPanel extends JPanel {
 
     public void addPlayer(Colour player, Map<Ticket,Integer> tickets){
         if(player.name().equals("Black")) {
-            mrX = new MrXJPanel("Black",tickets);
+            mrX = new MrXJPanel("Black");
         }
         else {
-            detectives.add(new DetectiveJPanel(player.name(), tickets));
+            detectives.add(new DetectiveJPanel(player.name()));
+
         }
         addToJPanel();
+    }
+
+    public void updateTickets (Colour player, Map<Ticket,Integer> tickets){
+        if(player.name().equals("Black")) {
+            mrX.setTicketValue(tickets);
+        }
+        else {
+            for (DetectiveJPanel detective : detectives) {
+                if (player.name().equals(detective.PlayerName.getText())){
+                    detective.setTicketValue(tickets);
+                }
+            }
+        }
     }
 
     private void addToJPanel() {
