@@ -1,3 +1,4 @@
+import org.junit.Test;
 import scotlandyard.*;
 import solution.Model.ScotlandYardModel;
 
@@ -22,7 +23,6 @@ public class TestHelper
     public final static Ticket[] tickets = { Ticket.Taxi, Ticket.Bus,
             Ticket.Underground, Ticket.DoubleMove,
             Ticket.SecretMove };
-
 
 
     public static class SingleMovePlayer implements  Player {

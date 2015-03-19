@@ -1,6 +1,8 @@
 package solution.Controller;
+import scotlandyard.ScotlandYard;
 import solution.Controller.Interfaces.ControllerButtonListener;
 import solution.Model.ScotlandYardModel;
+import solution.View.View;
 
 /**
  * Created by MikeCooper on 17/03/15.
@@ -9,11 +11,14 @@ public class Controller implements ControllerButtonListener {
 
 
     ScotlandYardModel theModel;
+    View theView;
+    ModelController theModelController;
 
     //input the model
-    public Controller (){
+    public Controller (ScotlandYardModel theModel, View theView){
         this.theModel = theModel;
-        //todo make model be accepted in constructor
+        this.theView = theView;
+        this.theModelController = new ModelController(theModel,theView);
     }
 
 

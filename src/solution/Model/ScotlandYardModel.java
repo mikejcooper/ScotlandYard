@@ -1,8 +1,10 @@
 package solution.Model;
 
 import scotlandyard.*;
+import solution.Controller.Controller;
 import solution.Model.GamePlayer.GamePlayer;
 import solution.Model.GamePlayer.GamePlayerMoveUtilities;
+import solution.View.View;
 
 import java.io.IOException;
 import java.util.*;
@@ -222,5 +224,4 @@ public class ScotlandYardModel extends ScotlandYard {
         }
         return true;
     }
-
 }

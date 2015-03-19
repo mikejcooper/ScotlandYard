@@ -1,9 +1,13 @@
 package solution.View.TicketPanel;
 
+import scotlandyard.Colour;
 import solution.Controller.Controller;
+import solution.Model.GamePlayer.GamePlayer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by MikeCooper on 17/03/15.
@@ -21,22 +25,22 @@ public class TicketJPanel extends JPanel {
         detectives = new DetectiveJPanel[5];
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
-        //todo only testing.
-        String[] args = {"Black","While","green","Blue"};
+    }
 
-        readInput(args);
+    public void initialisePanel(List<Colour> players, Map<Colour, GamePlayer> colourGamePlayerMap){
+        readInput(players);
         addToJPanel();
     }
 
     //todo better way to assure mrX is the last person to be added?
-    private void readInput(String[] args) {
+    private void readInput(List<Colour> players) {
         int x = 0;
-        for (String player : args) {
-            if(player.equals("Black")) {
+        for (Colour player : players) {
+            if(player.name().equals("Black")) {
                mrX = new MrXJPanel("Black");
             }
             else {
-                detectives[x] = new DetectiveJPanel(player);
+                detectives[x] = new DetectiveJPanel(player.name());
                 x++;
             }
         }

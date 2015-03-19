@@ -16,8 +16,8 @@ public class View extends JFrame {
 
     private GridBagConstraints gbc;
 
-    protected MapJPanel mapJPanel;
-    protected TicketJPanel ticketJPanel;
+    public MapJPanel mapJPanel;
+    public TicketJPanel ticketJPanel;
 
     public View () {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

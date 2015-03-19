@@ -1,6 +1,8 @@
 
 import org.junit.Test;
 import scotlandyard.*;
+import solution.Model.ScotlandYardModel;
+
 import java.util.*;
 
 
