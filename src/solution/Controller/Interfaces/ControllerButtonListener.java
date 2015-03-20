@@ -10,6 +10,11 @@ public interface ControllerButtonListener {
     public void UndergroundTicketUsed(String playerName);
     public void doubleMoveTicketUsed(String playerName);
     public void secretMoveTicketUsed(String playerName);
+    public void goButtonUsed(String playerName);
+
+
+    public void textInput(String input);
+
 
 
 }

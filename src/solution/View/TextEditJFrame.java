@@ -42,13 +42,13 @@ public class TextEditJFrame extends JFrame implements ActionListener{
         }
 
 
-        public void setOutputNewline (String value) {
-            output.append("/n"+value);
-        }
-
         public void setOutput (String value) {
-            clearInput();
-            output.setText("/n"+value);
+            if (output.toString().equals("")){
+                output.setText(value);
+            }
+            else {
+                output.append("\n"+value);
+            }
         }
 
         public void clearInput () {
@@ -83,8 +83,15 @@ public class TextEditJFrame extends JFrame implements ActionListener{
             Object source = e.getSource();
 
             if (source == input) {
-                setOutput(input.getText());
+                output.setText("Desination: " + input.getText() +" -> Press 'Go' to move");
+                controllerButtonListener.textInput(input.getText());
                 clearInput();
             }
         }
+
+    public void buttonListener(ControllerButtonListener controllerButtonListener){
+        this.controllerButtonListener = controllerButtonListener;
+    }
+
+
 }

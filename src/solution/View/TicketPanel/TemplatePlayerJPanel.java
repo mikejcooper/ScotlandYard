@@ -2,6 +2,7 @@ package solution.View.TicketPanel;
 
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import scotlandyard.Ticket;
 import solution.Controller.Interfaces.ControllerButtonListener;
 
@@ -75,14 +76,23 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
 
     public void setTaxiTicketValue (String value){
         TaxiTicketValue.setText(value);
+        if(Integer.parseInt(value) == 0){
+            activateDeactivateSpecificButtons("TaxiTicket",false);
+        }
     }
 
     public void setBusTicketValue (String value){
         BusTicketValue.setText(value);
+        if(Integer.parseInt(value) == 0){
+            activateDeactivateSpecificButtons("BusTicket",false);
+        }
     }
 
     public void setUndergroundTicketValue (String value){
         UndergroundTicketValue.setText(value);
+        if(Integer.parseInt(value) == 0){
+            activateDeactivateSpecificButtons("Underground",false);
+        }
     }
 
     //pass in controller, allows controller to tell view when model has changed, therefore view should also change.
@@ -95,32 +105,35 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         Object source = e.getSource();
 
         if(source == TaxiTicket){
-            setTaxiTicketValue("" + (Integer.parseInt(TaxiTicketValue.getText())-1));
             controllerButtonListener.taxiTicketUsed(PlayerName.getText());
         }
         if(source == BusTicket){
-            setBusTicketValue("" + (Integer.parseInt(BusTicketValue.getText())-1));
             controllerButtonListener.busTicketUsed(PlayerName.getText());
         }
         if(source == UndergroundTicket){
-            setUndergroundTicketValue("" + (Integer.parseInt(UndergroundTicketValue.getText())-1));
             controllerButtonListener.UndergroundTicketUsed(PlayerName.getText());
         }
     }
 
     public void activateDeactivateButtons (Boolean b) {
-        if (b) {
             TaxiTicket.setEnabled(b);
             BusTicket.setEnabled(b);
             UndergroundTicket.setEnabled(b);
-        }
-        else {
+    }
+
+    public void activateDeactivateSpecificButtons (String buttonName, Boolean b){
+        if(buttonName.equals(TaxiTicket.getText())){
             TaxiTicket.setEnabled(b);
+        }
+        else if (buttonName.equals(BusTicket.getText())){
             BusTicket.setEnabled(b);
+        }
+        else if (buttonName.equals(UndergroundTicket.getText())){
             UndergroundTicket.setEnabled(b);
         }
 
     }
+
 
 
 

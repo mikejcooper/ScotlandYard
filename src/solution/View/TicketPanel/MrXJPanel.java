@@ -52,10 +52,16 @@ public class MrXJPanel extends TemplatePlayerJPanel {
 
     public void setSecretMoveTicketValue (String value){
         SecretMoveTicketValue.setText(value);
+        if(Integer.parseInt(value) == 0){
+            activateDeactivateSpecificButtons("SecretMoveTicket",false);
+        }
     }
 
     public void setDoubleMoveTicketValue (String value){
         DoubleMoveTicketValue.setText(value);
+        if(Integer.parseInt(value) == 0){
+            activateDeactivateSpecificButtons("DoubleMoveTicket",false);
+        }
     }
 
 
@@ -66,11 +72,9 @@ public class MrXJPanel extends TemplatePlayerJPanel {
         Object source = e.getSource();
 
         if(source == SecretMoveTicket){
-            setSecretMoveTicketValue("" + (Integer.parseInt(SecretMoveTicketValue.getText())-1));
             controllerButtonListener.secretMoveTicketUsed(PlayerName.getText());
         }
         if(source == DoubleMoveTicket){
-            setDoubleMoveTicketValue("" + (Integer.parseInt(DoubleMoveTicketValue.getText())-1));
             controllerButtonListener.doubleMoveTicketUsed(PlayerName.getText());
         }
     }
@@ -78,16 +82,17 @@ public class MrXJPanel extends TemplatePlayerJPanel {
     @Override
     public void activateDeactivateButtons (Boolean b) {
         super.activateDeactivateButtons(b);
-
-        if (b) {
             DoubleMoveTicket.setEnabled(b);
             SecretMoveTicket.setEnabled(b);
-        }
-        else {
-            DoubleMoveTicket.setEnabled(b);
-            SecretMoveTicket.setEnabled(b);
-        }
-
     }
 
+    @Override
+    public void activateDeactivateSpecificButtons (String buttonName, Boolean b) {
+        super.activateDeactivateSpecificButtons(buttonName,b);
+        if (buttonName.equals(SecretMoveTicket.getText())) {
+            SecretMoveTicket.setEnabled(b);
+        } else if (buttonName.equals(DoubleMoveTicket.getText())) {
+            DoubleMoveTicket.setEnabled(b);
+        }
+    }
 }

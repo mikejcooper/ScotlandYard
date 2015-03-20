@@ -183,6 +183,15 @@ public class GamePlayerMoveUtilities {
     }
 
     /** adds the location to mrXLocations if the current round is true **/
+
+    //todo bug here??
+
+
+//    Exception in thread "AWT-EventQueue-0" java.lang.IndexOutOfBoundsException: Index: 10, Size: 5
+//    at java.util.ArrayList.rangeCheck(ArrayList.java:653)
+//    at java.util.ArrayList.get(ArrayList.java:429)
+//    at solution.Model.GamePlayer.GamePlayerMoveUtilities.mrXLocationUpdateCheck(GamePlayerMoveUtilities.java:187)
+//
     public void mrXLocationUpdateCheck (int location){
         if(mScotlandYard.getRounds().get(mScotlandYard.getRoundCount())) {
             mScotlandYard.getMrXLocations().add(location);
