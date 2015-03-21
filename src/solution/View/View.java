@@ -51,6 +51,7 @@ public class View extends JFrame {
     }
 
     private void setMapPanel() {
+
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -63,7 +64,6 @@ public class View extends JFrame {
         gbc.gridy = 1;
         add(ticketJPanel, gbc);
     }
-
     public void setControllerPrivileges(Controller controller) {
         //allow controller to access certain parts -
         ticketJPanel.setControllerPrivileges(controller);
