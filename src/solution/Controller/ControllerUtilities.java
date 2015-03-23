@@ -4,8 +4,12 @@ import scotlandyard.*;
 import solution.Model.ScotlandYardModel;
 import solution.View.View;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
+import static scotlandyard.Colour.*;
 
 /**
  * Created by MikeCooper on 19/03/15.
@@ -63,12 +67,36 @@ public class ControllerUtilities {
         theView.unpressAllButtonsMap();
         theView.goButtonToggle(false);
 
-        if(theModel.getValidMoves(theModel.getCurrentPlayer()).size() == 0){
-            //skip player
+        if(theModel.getValidMoves(theModel.getCurrentPlayer()).iterator().next() instanceof MovePass){
+            JOptionPane.showMessageDialog(null, "you can't move please click ok", "InfoBox: " + "Movepass", JOptionPane.INFORMATION_MESSAGE);
         }
         if(theModel.isGameOver()){
             //winners
+            Set<Colour> winner = theModel.getWinningPlayers();
+            String winners = "";
+            for(Colour colour: winner){
+                winners = winners + colourToString(colour) + ",";
+            }
+            JOptionPane.showMessageDialog(null, "the winners are: " + winners, "InfoBox: " + "WINNERS", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+
+    public String colourToString(Colour colour){
+        switch(colour){
+            case Black: return "Black";
+
+            case Blue: return "Blue";
+
+            case Green: return "Green";
+
+            case Red: return "Red";
+
+            case White: return "White";
+
+            case Yellow: return "Yellow";
+        }
+        return "that is not a colour";
     }
 
     public void nextPlayer(){
