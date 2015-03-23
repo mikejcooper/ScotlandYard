@@ -1,6 +1,7 @@
 package solution.Controller;
 import scotlandyard.*;
 import solution.Controller.Interfaces.ControllerButtonListener;
+import solution.InitialiseGame;
 import solution.Model.ScotlandYardModel;
 import solution.View.GameFrame;
 import solution.View.InitFrame;
@@ -75,15 +76,15 @@ public class Controller implements ControllerButtonListener {
     int doubleMoveToggle = 0;
 
     //input the model
-    public Controller (ScotlandYardModel theModel, View theView,InitFrame initFrame,GameFrame gameFrame){
+    public Controller (/*ScotlandYardModel theModel,*/ View theView,InitFrame initFrame,GameFrame gameFrame){
         this.gameFrame = gameFrame;
         this.initFrame = initFrame;
-        this.theModel = theModel;
+        //this.theModel = theModel;
         this.theView = theView;
-        this.theControllerUtilities = new ControllerUtilities(theModel,theView);
-        theView.setControllerPrivileges(this);
+        //this.theControllerUtilities = new ControllerUtilities(theModel,theView);
+        //theView.setControllerPrivileges(this);
+        //selectedNode = theModel.getPlayerLocation(theModel.getCurrentPlayer());
         initFrame.addListener(this);
-        selectedNode = theModel.getPlayerLocation(theModel.getCurrentPlayer());
     }
 
 
@@ -152,7 +153,10 @@ public class Controller implements ControllerButtonListener {
     public void playButtonPressed(){
         initFrame.setInvisible();
         theView.setVisible();
-
+        theModel = (ScotlandYardModel) new InitialiseGame(initFrame.getNumberOfPlayers() - 1,"graph.txt").game;
+        this.theControllerUtilities = new ControllerUtilities(theModel,theView);
+        theView.setControllerPrivileges(this);
+        selectedNode = theModel.getPlayerLocation(theModel.getCurrentPlayer());
     }
     @Override
     public void minusButtonPressed(){
@@ -183,7 +187,6 @@ public class Controller implements ControllerButtonListener {
         }
         displayCurrentMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
         theView.setCurrentPlayer(theModel.getCurrentPlayer());
-
     }
 
 
@@ -347,6 +350,10 @@ public class Controller implements ControllerButtonListener {
                 }
             }
         }
+    }
+
+    public void setTheModel(ScotlandYardModel theModel){
+        this.theModel = theModel;
     }
 
 }

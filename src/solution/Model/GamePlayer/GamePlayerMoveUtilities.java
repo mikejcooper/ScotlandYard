@@ -102,7 +102,7 @@ public class GamePlayerMoveUtilities {
         return moveList;
     }
 
-    protected List<Move> allPossibleMoves (Colour colour, int location, List<Move> moveList, Map<Ticket,Integer> ticketMap) { //todo this was buggy so i changed it, delete this comment when read
+    protected List<Move> allPossibleMoves (Colour colour, int location, List<Move> moveList, Map<Ticket,Integer> ticketMap) {
         for (Edge edge : getConnectedEdges(location)) {
             if(location == getSource(edge)) {
                 moveList.add(new MoveTicket(colour,getTarget(edge),getTicket(edge)));
