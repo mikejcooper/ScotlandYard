@@ -161,6 +161,12 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         }
     }
 
+    public void unpressAllButtons() {
+        TaxiTicket.setSelected(false);
+        BusTicket.setSelected(false);
+        UndergroundTicket.setSelected(false);
+    }
+
 
 
 

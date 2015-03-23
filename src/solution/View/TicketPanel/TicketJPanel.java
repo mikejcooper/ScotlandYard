@@ -126,6 +126,12 @@ public class TicketJPanel extends JPanel implements ActionListener {
         }
     }
 
+    public void unpressAllButtons() {
+        for (DetectiveJPanel detective : detectives) {
+            detective.unpressAllButtons();
+        }
+        mrX.unpressAllButtons();
+    }
 
 
     public void buttonListener(ControllerButtonListener controllerButtonListener){
@@ -142,5 +148,9 @@ public class TicketJPanel extends JPanel implements ActionListener {
 
             controllerButtonListener.goButtonUsed("GOBUTTON");
         }
+    }
+
+    public void goButtonToggle(Boolean b) {
+        GoButton.setEnabled(b);
     }
 }

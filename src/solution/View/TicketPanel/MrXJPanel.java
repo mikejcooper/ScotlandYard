@@ -117,4 +117,10 @@ public class MrXJPanel extends TemplatePlayerJPanel {
             DoubleMoveTicket.setEnabled(b);
         }
     }
+    @Override
+    public void unpressAllButtons() {
+        super.unpressAllButtons();
+        SecretMoveTicket.setSelected(false);
+        DoubleMoveTicket.setSelected(false);
+    }
 }

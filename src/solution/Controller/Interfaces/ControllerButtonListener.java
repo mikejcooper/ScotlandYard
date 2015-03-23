@@ -24,7 +24,8 @@ public interface ControllerButtonListener {
 
     public void goButtonUsed(String playerName);
 
-    public void mapButton (String nodeNumber);
+    public void mapButtonPressed (String nodeNumber);
+    public void mapButtonUnpressed (String nodeNumber);
 
 
 

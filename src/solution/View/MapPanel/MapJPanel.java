@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -51,11 +52,16 @@ public class MapJPanel extends JPanel implements ActionListener {
 
         for (ButtonHolder button : buttons) {
             if (source == button) {
-                System.out.println("map button" + button.getText());
-                controllerButtonListener.mapButton(button.getText());
+                if (button.isSelected()){
+                    controllerButtonListener.mapButtonPressed(button.getText());
+                }
+                else {
+                    controllerButtonListener.mapButtonUnpressed(button.getText());
+                }
             }
         }
     }
+
 
     public void buttonListener(ControllerButtonListener controllerButtonListener){
         this.controllerButtonListener = controllerButtonListener;
@@ -76,4 +82,13 @@ public class MapJPanel extends JPanel implements ActionListener {
         }
     }
 
+    public Set<ButtonHolder> findSelectedButtons() {
+        Set<ButtonHolder> buttonList = new HashSet<ButtonHolder>();
+        for (ButtonHolder button : buttons) {
+            if(button.isSelected()) {
+                buttonList.add(button);
+            }
+        }
+        return buttonList;
+    }
 }

@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 * Created by gebruiker on 18/03/2015.
 */
 
-public class ButtonHolder extends JButton {
+public class ButtonHolder extends JToggleButton {
     private double xCoordinate;
     private double yCoordinate;
 

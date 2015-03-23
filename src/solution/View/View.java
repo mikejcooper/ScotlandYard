@@ -5,6 +5,7 @@ import scotlandyard.Move;
 import scotlandyard.MoveDouble;
 import scotlandyard.Ticket;
 import solution.Controller.Controller;
+import solution.View.MapPanel.ButtonHolder;
 import solution.View.MapPanel.MapJPanel;
 import solution.View.TicketPanel.TicketJPanel;
 
@@ -119,6 +120,10 @@ public class View extends JPanel {
         ticketJPanel.activateSpecificButtons(buttonName,b,currentPlayer);
     }
 
+   public void unpressAllButtons() {
+       ticketJPanel.unpressAllButtons();
+   }
+
 
 
     public void activateSpecificButtonsMap (String nodeName, Boolean b){
@@ -168,10 +173,18 @@ public class View extends JPanel {
         setVisible(false);
     }
 
+    public void goButtonToggle(Boolean b) {
+        ticketJPanel.goButtonToggle(b);
+    }
 
-
+    public Set<ButtonHolder> findSelectedButtons() {
+        return mapJPanel.findSelectedButtons();
+    }
 
 }
+
+
+
 
 
 

@@ -58,6 +58,7 @@ public class ControllerUtilities {
         ////Updates ticket values.
         loadTicketValues();
         sortMoves();
+        showValidTickets(theModel.getValidMoves(theModel.getCurrentPlayer()));
     }
 
     public void nextPlayer(){
@@ -176,6 +177,20 @@ public class ControllerUtilities {
             }
         }
     }
+
+    public void showValidTickets(List<Move> moves){
+        theView.activateSpecificButtonsPanelException("nothing",false,theModel.getCurrentPlayer());
+        for (Move move : moves) {
+            if(move instanceof MoveTicket){
+                theView.activateSpecificButtonsPanel(((MoveTicket) move).ticket.toString(),true,theModel.getCurrentPlayer());
+            }
+            if(move instanceof MoveDouble){
+                theView.activateSpecificButtonsPanel("DoubleMove",true,theModel.getCurrentPlayer());
+            }
+        }
+    }
+
+
 
     private Boolean findMoveDouble(MoveDouble moveDouble, int node1, int node2, Ticket currentTransportTicket, Ticket currentTransportTicket2) {
         int check = 0;
