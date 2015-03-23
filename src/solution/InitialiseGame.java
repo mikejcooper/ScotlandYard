@@ -25,8 +25,7 @@ public class InitialiseGame {
 
 
         public final static int[] mrXTicketNumbers = { 4, 3, 3, 2, 5 };
-        //public final static int[] detectiveTicketNumbers = { 11, 8, 4, 0, 0 };
-        public final static int[] detectiveTicketNumbers = { 0, 1, 1, 0, 0 };
+        public final static int[] detectiveTicketNumbers = { 11, 8, 4, 0, 0 };
 
         public final static Ticket[] tickets = { Ticket.Taxi, Ticket.Bus,
                 Ticket.Underground, Ticket.DoubleMove,
