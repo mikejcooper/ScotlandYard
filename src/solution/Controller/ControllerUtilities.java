@@ -68,11 +68,7 @@ public class ControllerUtilities {
         theView.goButtonToggle(false);
         theView.unpressAllButtons();
 
-        if(theModel.getValidMoves(theModel.getCurrentPlayer()).iterator().next() instanceof MovePass){
-            JOptionPane.showMessageDialog(null, "you can't move please click ok", "InfoBox: " + "Movepass", JOptionPane.INFORMATION_MESSAGE);
-            //todo
-            //nextPlayer();
-        }
+
         if(theModel.isGameOver()){
             //winners
             Set<Colour> winner = theModel.getWinningPlayers();
@@ -80,10 +76,19 @@ public class ControllerUtilities {
             for(Colour colour: winner){
                 winners = winners + colourToString(colour) + ",";
             }
+            winners = winners.replace(winners.substring(winners.length()-1), "");
             JOptionPane.showMessageDialog(null, "the winners are: " + winners, "InfoBox: " + "WINNERS", JOptionPane.INFORMATION_MESSAGE);
             System.exit(1);
         }
+        if(theModel.getValidMoves(theModel.getCurrentPlayer()).iterator().next() instanceof MovePass){
+            String player = colourToString(theModel.getCurrentPlayer());
+            JOptionPane.showMessageDialog(null, "Player '" + player  + "' , you can not move", "InfoBox: " + "Movepass", JOptionPane.INFORMATION_MESSAGE);
+            //todo
+            nextPlayer();
+        }
     }
+
+
 
 
     public String colourToString(Colour colour){

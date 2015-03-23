@@ -152,7 +152,7 @@ public class ScotlandYardModel extends ScotlandYard {
     @Override
     public boolean isGameOver() {
         if(!isReady()) return false;
-
+        if(areAllDetectivesStuck()) return true;
         if(areTicketMapsEmpty()) return true;
         if(roundCount + 1 == rounds.size() && currentPlayer == Colour.Black) return true;
         if(getPlayerMove(Colour.Black) == null) return true;
