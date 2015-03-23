@@ -35,8 +35,7 @@ public class TicketJPanel extends JPanel implements ActionListener {
         detectives = new HashSet<DetectiveJPanel>();
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
-        this.setOpaque(true);
-        this.setBackground(new Color(0,0,0,0));
+        this.setOpaque(false);
     }
 
     public void addPlayer(Colour player, Map<Ticket, Integer> tickets) {

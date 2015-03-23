@@ -33,7 +33,7 @@ public class InitialiseGame {
 
 
 
-        ScotlandYard game;
+        public ScotlandYard game;
         public InitialiseGame(int numberOfDetectives, String graphFileName) {
             game = subscribedGame(numberOfDetectives, graphFileName);
          }

@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by MikeCooper on 16/03/15.
  */
-public class View extends JFrame {
+public class View extends JPanel {
 
     private GridBagConstraints gbc;
 
@@ -31,11 +31,10 @@ public class View extends JFrame {
 
 
     public View() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1300, 800);
 
 
-        setBackground();
+        //setBackground();
 
         ticketJPanel = new TicketJPanel();
         mapJPanel = new MapJPanel();
@@ -49,15 +48,15 @@ public class View extends JFrame {
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
 
-       //todo background
 
        // loadBackgroundImage();
         setJFrameLayout();
 
 
         //pack();
+        this.setOpaque(false);
 
-        setVisible(true);
+        setVisible(false);
     }
 
 
@@ -81,21 +80,7 @@ public class View extends JFrame {
         add(ticketJPanel, gbc);
     }
 
-    private void loadBackgroundImage() {
 
-
-        BufferedImage background = null;
-        try
-        {
-            background = ImageIO.read(new File("background.jpg"));
-        }
-        catch( IOException e )
-        {
-            System.out.println(e);
-        }
-        this.setContentPane(new ImagePanel(background));
-
-}
 
     public void setControllerPrivileges(Controller controller) {
         //allow controller to access certain parts -
@@ -144,23 +129,23 @@ public class View extends JFrame {
         mapJPanel.activateDeactivateButtons(b);
     }
 
-    private void setBackground(){
-        Image img = null;
-        try
-        {
-            img = ImageIO.read(new File("background.jpg"));
-        }
-        catch( IOException e )
-        {
-            System.out.println(e);
-        }
-
-        //ImageIcon background = new ImageIcon("background.jpg");
-        assert img != null;
-        Image scaleImage = img.getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
-        ImageIcon background = new ImageIcon(scaleImage);
-        setContentPane(new JLabel(background));
-    }
+//    private void setBackground(){
+//        Image img = null;
+//        try
+//        {
+//            img = ImageIO.read(new File("background.jpg"));
+//        }
+//        catch( IOException e )
+//        {
+//            System.out.println(e);
+//        }
+//
+//        //ImageIcon background = new ImageIcon("background.jpg");
+//        assert img != null;
+//        Image scaleImage = img.getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
+//        ImageIcon background = new ImageIcon(scaleImage);
+//        setContentPane(new JLabel(background));
+//    }
 
 
     class ImagePanel extends JComponent {
@@ -173,6 +158,14 @@ public class View extends JFrame {
             super.paintComponent(g);
             g.drawImage(image, 0, 0, this);
         }
+    }
+
+    public void setVisible(){
+        setVisible(true);
+    }
+
+    public void setInvisible(){
+        setVisible(false);
     }
 
 

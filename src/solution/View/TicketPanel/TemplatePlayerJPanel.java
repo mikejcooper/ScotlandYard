@@ -42,8 +42,7 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         TaxiTicket.addActionListener(this);
         BusTicket.addActionListener(this);
         UndergroundTicket.addActionListener(this);
-        this.setOpaque(true);
-        this.setBackground(new Color(0,0,0,0));
+        this.setOpaque(false);
     }
 
     public void setTicketValue(Map<Ticket,Integer> tickets) {

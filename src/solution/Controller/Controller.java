@@ -2,6 +2,8 @@ package solution.Controller;
 import scotlandyard.*;
 import solution.Controller.Interfaces.ControllerButtonListener;
 import solution.Model.ScotlandYardModel;
+import solution.View.GameFrame;
+import solution.View.InitFrame;
 import solution.View.View;
 
 import java.util.List;
@@ -55,9 +57,10 @@ public class Controller implements ControllerButtonListener {
         //show MoveDouble tickets with move1 = specific ticket
 
 
-
+    GameFrame gameFrame;
     ScotlandYardModel theModel;
     View theView;
+    InitFrame initFrame;
     ControllerUtilities theControllerUtilities;
     private Ticket currentTransportTicket = Ticket.Bus;
     private Ticket currentTransportTicket2 = Ticket.Bus;
@@ -69,11 +72,14 @@ public class Controller implements ControllerButtonListener {
     int selectedNode2;
 
     //input the model
-    public Controller (ScotlandYardModel theModel, View theView){
+    public Controller (ScotlandYardModel theModel, View theView,InitFrame initFrame,GameFrame gameFrame){
+        this.gameFrame = gameFrame;
+        this.initFrame = initFrame;
         this.theModel = theModel;
         this.theView = theView;
         this.theControllerUtilities = new ControllerUtilities(theModel,theView);
         theView.setControllerPrivileges(this);
+        initFrame.addListener(this);
         selectedNode = theModel.getPlayerLocation(theModel.getCurrentPlayer());
     }
 
@@ -129,6 +135,23 @@ public class Controller implements ControllerButtonListener {
         unpressedButtonAction(playerName,Ticket.SecretMove);
     }
 
+
+    //todo
+    @Override
+    public void plusButtonPressed(){
+        if(initFrame.getNumberOfPlayers() != 6) initFrame.setNumberOfPlayers(initFrame.getNumberOfPlayers() + 1);
+    }
+
+    @Override
+    public void playButtonPressed(){
+        initFrame.setInvisible();
+        theView.setVisible();
+
+    }
+    @Override
+    public void minusButtonPressed(){
+        if(initFrame.getNumberOfPlayers() != 2) initFrame.setNumberOfPlayers(initFrame.getNumberOfPlayers() - 1);
+    }
 
     public void pressedButtonAction(String playerName, Ticket currentTicket){
         System.out.println("button recieved at controller" + playerName);
