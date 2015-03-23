@@ -185,6 +185,8 @@ public class View extends JPanel {
         mapJPanel.unpressAllButtonsMap();
     }
 
+    public MapJPanel getMapJPanel(){ return mapJPanel;}
+
 }
 
 

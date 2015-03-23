@@ -1,15 +1,18 @@
 package solution.View.MapPanel;
 
+import scotlandyard.Colour;
 import solution.Controller.Interfaces.ControllerButtonListener;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
+import javax.swing.plaf.basic.BasicBorders;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by MikeCooper on 16/03/15.
@@ -98,4 +101,40 @@ public class MapJPanel extends JPanel implements ActionListener {
         }
 
     }
+
+    public void circleButtons(Map<Colour,Integer> map){
+        for(Colour colour: map.keySet()) {
+            for (ButtonHolder button : buttons) {
+                if (String.valueOf(map.get(colour)).equals(button.getText())) {
+                    button.setBorder(new LineBorder(findColour(colour), 5));
+                }
+            }
+        }
+    }
+
+    public Color findColour(Colour colour){
+
+        switch(colour){
+            case Black: return new Color(0,0,0, 255);
+            case Blue:return new Color(0, 25, 255, 255);
+            case Green:return new Color(5, 255,0, 255);
+            case Red:return new Color(227, 22, 32, 255);
+            case Yellow:return new Color(253, 237,0, 255);
+            case White:return new Color(255, 255, 255, 255);
+
+
+
+        }
+        return new Color(0,0,0,0);
+    }
+
+    public void getRidOfAllBorders(){
+        for(ButtonHolder button : buttons){
+            button.setBorder(UIManager.getBorder("Button.border"));
+        }
+    }
+
+
+
+
 }

@@ -236,4 +236,21 @@ public class ScotlandYardModel extends ScotlandYard {
         }
         return true;
     }
+
+//    public List<Integer> getAllLocations(){
+//        List<Integer> list = new ArrayList<Integer>();
+//        for(Colour colour:colourGamePlayerMap.keySet()){
+//            list.add(getPlayerLocation(colour));
+//        }
+//        return list;
+//    }
+
+    public Map<Colour,Integer> getColourToLocationMap(){
+        Map<Colour,Integer> map = new HashMap<Colour, Integer>();
+        for(Colour colour : colourGamePlayerMap.keySet()){
+            map.put(colour,getPlayerLocation(colour));
+        }
+        return map;
+    }
+
 }
