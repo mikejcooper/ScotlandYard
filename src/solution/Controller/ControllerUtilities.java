@@ -62,6 +62,7 @@ public class ControllerUtilities {
         displayCurrentMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
         theView.unpressAllButtonsMap();
         theView.goButtonToggle(false);
+        theView.unpressAllButtons();
 
         if(theModel.getValidMoves(theModel.getCurrentPlayer()).size() == 0){
             //skip player
@@ -200,8 +201,8 @@ public class ControllerUtilities {
         for (Move move : moveDouble.moves) {
             if(move instanceof MoveTicket){
                 if (matchMoveTicketToNode((MoveTicket) move, node1, currentTransportTicket)) check++;
-                if (matchMoveTicketToNode((MoveTicket) move, node2, currentTransportTicket)) check++;
-                if (matchMoveTicketToNode((MoveTicket) move, node1, currentTransportTicket2)) check++;
+                //if (matchMoveTicketToNode((MoveTicket) move, node2, currentTransportTicket)) check++;
+                //if (matchMoveTicketToNode((MoveTicket) move, node1, currentTransportTicket2)) check++;
                 if (matchMoveTicketToNode((MoveTicket) move, node2, currentTransportTicket2)) check++;
             }
         }

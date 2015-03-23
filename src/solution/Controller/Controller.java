@@ -65,7 +65,6 @@ public class Controller implements ControllerButtonListener {
     public void doubleMoveTicketPressed(String playerName) {
         doubleMoveToggle = 1;
         pressedButtonAction(playerName,Ticket.DoubleMove);
-
     }
 
     @Override
@@ -113,6 +112,7 @@ public class Controller implements ControllerButtonListener {
         theModel = (ScotlandYardModel) new InitialiseGame(initFrame.getNumberOfPlayers() - 1,"graph.txt").game;
         this.theControllerUtilities = new ControllerUtilities(theModel,theView);
         theView.setControllerPrivileges(this);
+        theView.setControllerPrivileges(this);
     }
     @Override
     public void minusButtonPressed(){
@@ -124,16 +124,24 @@ public class Controller implements ControllerButtonListener {
 
     public void pressedButtonAction(String playerName, Ticket currentTicket){
         System.out.println("button recieved at controller" + playerName);
+        theView.unpressAllButtonsMap();
+        currentNode1 = "0";
+        currentNode2 = "0";
 
         if(doubleMoveToggle == 1){
             doubleMovePressed(currentTicket);
         }
         else {
-            moveToggle = 1;
+            if (moveToggle == 1){
+                moveToggle = 0;
+            }
+            else{
+                moveToggle = 1;
+            }
             List<Move> moves = theControllerUtilities.findMoves(currentTicket);
             theControllerUtilities.displayCurrentMoves(moves);
             theView.activateSpecificButtonsPanelException(currentTicket.name(), false, theModel.getCurrentPlayer());
-            toggleGoButton(true);
+            toggleGoButton();
             ticket3 = currentTicket;
 
             if(moves.size() == 0){
@@ -150,8 +158,16 @@ public class Controller implements ControllerButtonListener {
         else {
             theControllerUtilities.displayCurrentMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
             theControllerUtilities.showValidTickets(theModel.getValidMoves(theModel.getCurrentPlayer()));
-            toggleGoButton(false);
+
+            if (moveToggle == 1){
+                moveToggle = 0;
+            }
+            else{
+                moveToggle = 1;
+            }
+            toggleGoButton();
         }
+
     }
 
     @Override
@@ -167,29 +183,35 @@ public class Controller implements ControllerButtonListener {
                 theControllerUtilities.playMove(move);
                 theControllerUtilities.nextPlayer();
             }
+            moveToggle = 0;
+            doubleMoveToggle = 0;
         }
 
-    public void toggleGoButton(Boolean b) {
-        if (b){
-            Set<ButtonHolder> buttons = theView.findSelectedButtons();
-            if(buttons.size() == 2 && doubleMoveToggle == 2) {
-                theView.goButtonToggle(b);
-                doubleMoveToggle = 1;
-            }
-            else if (buttons.size() == 1 && doubleMoveToggle == 0 && moveToggle == 1){
-                theView.goButtonToggle(b);
-            }
+    public void toggleGoButton() {
+        Set<ButtonHolder> buttons = theView.findSelectedButtons();
+        if(buttons.size() == 2 && doubleMoveToggle == 2) {
+            theView.goButtonToggle(true);
+            doubleMoveToggle = 1;
+        }
+        else if (buttons.size() == 1 && doubleMoveToggle == 0 && moveToggle == 1){
+            theView.goButtonToggle(true);
         }
         else{
-            theView.goButtonToggle(b);
+            theView.goButtonToggle(false);
         }
-
     }
 
     @Override
     public void mapButtonPressed(String nodeNumber) {
         System.out.println("controller PR "+nodeNumber);
-        toggleGoButton(true);
+        toggleGoButton();
+        if(currentNode1.equals("0")){
+            currentNode1 = nodeNumber;
+        }
+        else{
+            currentNode2 = nodeNumber;
+        }
+
     }
 
     @Override
@@ -243,21 +265,19 @@ public class Controller implements ControllerButtonListener {
             theControllerUtilities.displayCurrentMoves(theControllerUtilities.moveDoubles);
             theView.activateSpecificButtonsPanelException("DoubleMove", false, Colour.Black);
             theControllerUtilities.showValidDoubleMoveTicketsFirstMove(theControllerUtilities.moveDoubles);
-            toggleGoButton(false);
         }
         else if (ticket2.equals(Ticket.DoubleMove)){
             List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,ticket1, theControllerUtilities.moveDoubles);
             theControllerUtilities.displayCurrentMoves(movesSortedByTicketsNode1);
             theView.activateSpecificButtonsPanelException("DoubleMove", false, Colour.Black);
             theControllerUtilities.showValidDoubleMoveTicketsSecondMove(movesSortedByTicketsNode1);
-            toggleGoButton(false);
         }
         else {
             List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,ticket1, theControllerUtilities.moveDoubles);
             List<Move> movesSortedByTicketsNode1AND2 = theControllerUtilities.sortMoveDoubleByTicket(1, ticket2, movesSortedByTicketsNode1);
             theControllerUtilities.displayCurrentMoves(movesSortedByTicketsNode1AND2);
             doubleMoveToggle = 2;
-            toggleGoButton(true);
+            toggleGoButton();
         }
     }
 
