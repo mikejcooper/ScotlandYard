@@ -18,16 +18,15 @@ import javax.swing.JLabel;
 public class GraphDisplay {
 
     private JLabel map = new JLabel();
-    Map<String, List<Integer>> coordinateMap;
+    Set<ButtonHolder> buttonSet = new HashSet<ButtonHolder>();
     double widthOfImage;
     double heightOfImage;
 
     public GraphDisplay() {
-        coordinateMap = new LinkedHashMap<String, List<Integer>>();
 
         //width and height are initialised here so coordinates of nodes are right
-        this.widthOfImage = 1018;
-        this.heightOfImage = 809;
+        this.widthOfImage = 1200;
+        this.heightOfImage = 600;
 
         loadMapImage();
         fillCoordinateMap();
@@ -69,16 +68,12 @@ public class GraphDisplay {
             String line = in.nextLine();
             String[] parts = line.split(" ");
 
-            double x = Double.parseDouble(parts[1]) * (widthOfImage/1018);
-            double y = Double.parseDouble(parts[2]) * (heightOfImage / 809);
+            double x = Double.parseDouble(parts[1]) * (widthOfImage/1018) - 10;
+            double y = Double.parseDouble(parts[2]) * (heightOfImage / 809) - 5;
 
             // x' = x * (width'/width)
 
-            List<Integer> xy = new ArrayList<Integer>();
-            xy.add((int) x - 11);
-            xy.add((int) y - 5);
-
-            coordinateMap.put(parts[0],xy);
+            buttonSet.add(new ButtonHolder(Integer.parseInt(parts[0]),x,y));
         }
     }
 
@@ -91,8 +86,8 @@ public class GraphDisplay {
         return widthOfImage;
     }
 
-    public Map<String, List<Integer>> getCoordinateMap() {
-        return coordinateMap;
+    public Set<ButtonHolder> getButtonSet() {
+        return buttonSet;
     }
     public JLabel getMap(){
         return map;
