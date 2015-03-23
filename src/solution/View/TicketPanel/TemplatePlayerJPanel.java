@@ -42,6 +42,7 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         TaxiTicket.addActionListener(this);
         BusTicket.addActionListener(this);
         UndergroundTicket.addActionListener(this);
+        setLabelFont2();
         this.setOpaque(false);
     }
 
@@ -167,6 +168,16 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         UndergroundTicket.setSelected(false);
     }
 
+    public void setLabelFont2(){
+        PlayerName.setFont(new Font("Serife",Font.PLAIN, 15));
+        PlayerName.setForeground(new Color(255, 255, 255, 255));
+        TaxiTicketValue.setFont(new Font("Serife", Font.PLAIN, 15));
+        TaxiTicketValue.setForeground(new Color(255, 255, 255, 255));
+        BusTicketValue.setFont(new Font("Serife",Font.PLAIN, 15));
+        BusTicketValue.setForeground(new Color(255, 255, 255, 255));
+        UndergroundTicketValue.setFont(new Font("Serife",Font.PLAIN, 15));
+        UndergroundTicketValue.setForeground(new Color(255, 255, 255, 255));
+    }
 
 
 

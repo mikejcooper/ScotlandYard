@@ -26,6 +26,10 @@ public class MrXJPanel extends TemplatePlayerJPanel {
 
         SecretMoveTicket.addActionListener(this);
         DoubleMoveTicket.addActionListener(this);
+
+
+
+        setLabelFont();
     }
 
     @Override
@@ -122,5 +126,15 @@ public class MrXJPanel extends TemplatePlayerJPanel {
         super.unpressAllButtons();
         SecretMoveTicket.setSelected(false);
         DoubleMoveTicket.setSelected(false);
+    }
+
+    public void setLabelFont(){
+        SecretMoveTicketValue.setFont(new Font("Serife",Font.PLAIN, 15));
+        SecretMoveTicketValue.setForeground(new Color(255, 255, 255, 255));
+        DoubleMoveTicketValue.setFont(new Font("Serife", Font.PLAIN, 15));
+        DoubleMoveTicketValue.setForeground(new Color(255, 255, 255, 255));
+        SpecialMovesLabel.setFont(new Font("Serife",Font.PLAIN, 15));
+        SpecialMovesLabel.setForeground(new Color(255, 255, 255, 255));
+
     }
 }

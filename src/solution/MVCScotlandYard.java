@@ -22,14 +22,14 @@ public class MVCScotlandYard {
     public static void main(String[] args) throws IOException {
 
         //Initial game variables
-        int numberOfDetectives = 5;
-        String graphFileName = "graph.txt";
-
-        ScotlandYardModel theModel = (ScotlandYardModel) new InitialiseGame(numberOfDetectives,graphFileName).game;
+//        int numberOfDetectives = 5;
+//        String graphFileName = "graph.txt";
+//
+//        ScotlandYardModel theModel = (ScotlandYardModel) new InitialiseGame(numberOfDetectives,graphFileName).game;
         View theView = new View();
         InitFrame initFrame = new InitFrame();
         GameFrame gameFrame = new GameFrame(theView,initFrame);
-        Controller theController = new Controller(theModel, theView, initFrame,gameFrame);
+        Controller theController = new Controller( theView, initFrame,gameFrame);
 
 
 

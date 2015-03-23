@@ -29,6 +29,8 @@ public class InitFrame extends JPanel implements ActionListener{
         buttonPlay.addActionListener(this);
         buttonMinus.addActionListener(this);
         buttonPlus.addActionListener(this);
+        numberOfPlayers.setFont(new Font("Serife", Font.PLAIN,50));
+        numberOfPlayers.setForeground(new Color(247, 239, 255, 255));
 
 
         setPanelLayout();
