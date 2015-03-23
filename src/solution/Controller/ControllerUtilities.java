@@ -70,6 +70,8 @@ public class ControllerUtilities {
 
         if(theModel.getValidMoves(theModel.getCurrentPlayer()).iterator().next() instanceof MovePass){
             JOptionPane.showMessageDialog(null, "you can't move please click ok", "InfoBox: " + "Movepass", JOptionPane.INFORMATION_MESSAGE);
+            //todo
+            //nextPlayer();
         }
         if(theModel.isGameOver()){
             //winners
@@ -79,6 +81,7 @@ public class ControllerUtilities {
                 winners = winners + colourToString(colour) + ",";
             }
             JOptionPane.showMessageDialog(null, "the winners are: " + winners, "InfoBox: " + "WINNERS", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(1);
         }
     }
 
