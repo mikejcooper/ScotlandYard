@@ -17,7 +17,9 @@ public interface ControllerButtonListener {
     public void doubleMoveTicketUnpressed(String playerName);
     public void secretMoveTicketUnpressed(String playerName);
 
-
+    public void plusButtonPressed();
+    public void minusButtonPressed();
+    public void playButtonPressed();
 
 
     public void goButtonUsed(String playerName);

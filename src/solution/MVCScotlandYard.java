@@ -4,6 +4,8 @@ import scotlandyard.Player;
 import scotlandyard.ScotlandYard;
 import scotlandyard.Ticket;
 import solution.Controller.Controller;
+import solution.View.GameFrame;
+import solution.View.InitFrame;
 import solution.View.View;
 import solution.Model.ScotlandYardModel;
 
@@ -25,7 +27,9 @@ public class MVCScotlandYard {
 
         ScotlandYardModel theModel = (ScotlandYardModel) new InitialiseGame(numberOfDetectives,graphFileName).game;
         View theView = new View();
-        Controller theController = new Controller(theModel, theView);
+        InitFrame initFrame = new InitFrame();
+        GameFrame gameFrame = new GameFrame(theView,initFrame);
+        Controller theController = new Controller(theModel, theView, initFrame,gameFrame);
 
 
 
