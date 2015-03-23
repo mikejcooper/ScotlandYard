@@ -46,6 +46,7 @@ public class View extends JFrame {
         setLayout(new GridBagLayout());
 
        //todo background
+
        // loadBackgroundImage();
         setJFrameLayout();
 
@@ -121,9 +122,15 @@ public class View extends JFrame {
     //----------------------
 
 
-    public void activateSpecificButtonsPanel (String buttonName, Boolean b, Colour currentPlayer){
-        ticketJPanel.activateSpecificButtons(buttonName,b,currentPlayer);
+
+    public void activateSpecificButtonsPanelException (String buttonName, Boolean b, Colour currentPlayer){
+        ticketJPanel.activateSpecificButtonsException(buttonName,b,currentPlayer);
     }
+    public void activateSpecificButtonsPanel (String buttonName, Boolean b, Colour currentPlayer){
+        ticketJPanel.activateSpecificButtonsException(buttonName,b,currentPlayer);
+    }
+
+
 
     public void activateSpecificButtonsMap (String nodeName, Boolean b){
         mapJPanel.activateDeactivateSpecificButtons(nodeName,b);

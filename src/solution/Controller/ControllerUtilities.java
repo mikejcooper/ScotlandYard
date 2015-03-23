@@ -136,12 +136,13 @@ public class ControllerUtilities {
         moveTickets = new ArrayList<MoveTicket>();
         moveDoubles = new ArrayList<Move>();
         movePasses = new ArrayList<MovePass>();
+        List<Move> a = theModel.getValidMoves(theModel.getCurrentPlayer());
         for (Move move : theModel.getValidMoves(theModel.getCurrentPlayer())) {
             if (move instanceof MoveTicket) {
                 moveTickets.add((MoveTicket) move);
             }
             if (move instanceof MoveDouble){
-                moveDoubles.add((MoveDouble) move);
+                moveDoubles.add(move);
             }
             if (move instanceof MovePass){
                 movePasses.add((MovePass) move);
@@ -157,6 +158,17 @@ public class ControllerUtilities {
                     }
                 }
         return move;
+    }
+
+
+    public void showValidDoubleMoveTickets(){
+        for (Move moveDouble : moveDoubles) {
+            if(moveDouble instanceof MoveDouble){
+                theView.activateSpecificButtonsPanel(((MoveTicket)((MoveDouble) moveDouble).moves.get(0)).ticket.toString(),false,theModel.getCurrentPlayer());
+            }
+
+        }
+
     }
 
     private Boolean findMoveDouble(MoveDouble moveDouble, int node1, int node2, Ticket currentTransportTicket, Ticket currentTransportTicket2) {

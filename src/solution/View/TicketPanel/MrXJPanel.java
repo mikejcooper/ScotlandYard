@@ -14,8 +14,8 @@ import java.util.Map;
  */
 public class MrXJPanel extends TemplatePlayerJPanel {
 
-        private JButton SecretMoveTicket = new JButton("Secret Move");
-        private JButton DoubleMoveTicket = new JButton("DoubleMove");
+        private JToggleButton SecretMoveTicket = new JToggleButton("SecretMove");
+        private JToggleButton DoubleMoveTicket = new JToggleButton("DoubleMove");
         private JLabel SecretMoveTicketValue = new JLabel("5");
         private JLabel DoubleMoveTicketValue = new JLabel("5");
         private JLabel SpecialMovesLabel = new JLabel("Special Moves (MrX)");
@@ -72,10 +72,20 @@ public class MrXJPanel extends TemplatePlayerJPanel {
         Object source = e.getSource();
 
         if(source == SecretMoveTicket){
-            controllerButtonListener.secretMoveTicketUsed(PlayerName.getText());
+            if (SecretMoveTicket.isSelected()){
+                controllerButtonListener.secretMoveTicketPressed(PlayerName.getText());
+            }
+            else {
+                controllerButtonListener.secretMoveTicketUnpressed(PlayerName.getText());
+            }
         }
         if(source == DoubleMoveTicket){
-            controllerButtonListener.doubleMoveTicketUsed(PlayerName.getText());
+            if (DoubleMoveTicket.isSelected()){
+                controllerButtonListener.doubleMoveTicketPressed(PlayerName.getText());
+            }
+            else {
+                controllerButtonListener.doubleMoveTicketUnpressed(PlayerName.getText());
+            }
         }
     }
 
@@ -89,9 +99,10 @@ public class MrXJPanel extends TemplatePlayerJPanel {
     @Override
     public void activateDeactivateSpecificButtons (String buttonName, Boolean b) {
         super.activateDeactivateSpecificButtons(buttonName,b);
-        if (buttonName.equals(SecretMoveTicket.getText())) {
+        if (!(buttonName.equals(SecretMoveTicket.getText()))) {
             SecretMoveTicket.setEnabled(b);
-        } else if (buttonName.equals(DoubleMoveTicket.getText())) {
+        }
+        if (!(buttonName.equals(DoubleMoveTicket.getText()))) {
             DoubleMoveTicket.setEnabled(b);
         }
     }

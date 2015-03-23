@@ -78,109 +78,84 @@ public class Controller implements ControllerButtonListener {
     }
 
 
-    //when clicked, each ticket sorts the list of availble moves by that specific ticket.
 
     @Override
-    public void taxiTicketUsed(String playerName) {
-        System.out.println("Received at Controller taxi " + playerName);
+    public void taxiTicketPressed(String playerName) {
+        pressedButtonAction(playerName,Ticket.Taxi);
+    }
 
-        if(currentTransportTicket.equals(Ticket.DoubleMove) && goButtonLatch != 3){
-            doubleMoveException(Ticket.Taxi);
+    @Override
+    public void busTicketPressed(String playerName) {
+        pressedButtonAction(playerName,Ticket.Bus);
+    }
+
+    @Override
+    public void undergroundTicketPressed(String playerName) {
+        pressedButtonAction(playerName,Ticket.Underground);
+    }
+
+    @Override
+    public void doubleMoveTicketPressed(String playerName) {
+        pressedButtonAction(playerName,Ticket.DoubleMove);
+    }
+
+    @Override
+    public void secretMoveTicketPressed(String playerName) {
+        pressedButtonAction(playerName,Ticket.SecretMove);
+    }
+
+    @Override
+    public void taxiTicketUnpressed(String playerName) {
+        unpressedButtonAction(playerName, Ticket.Taxi);
+    }
+
+    @Override
+    public void busTicketUnpressed(String playerName) {
+        unpressedButtonAction(playerName,Ticket.Bus);
+    }
+
+    @Override
+    public void undergroundTicketUnpressed(String playerName) {
+        unpressedButtonAction(playerName,Ticket.Underground);
+    }
+
+    @Override
+    public void doubleMoveTicketUnpressed(String playerName) {
+        unpressedButtonAction(playerName,Ticket.DoubleMove);
+    }
+
+    @Override
+    public void secretMoveTicketUnpressed(String playerName) {
+        unpressedButtonAction(playerName,Ticket.SecretMove);
+    }
+
+
+    public void pressedButtonAction(String playerName, Ticket currentTicket){
+        System.out.println("button recieved at controller" + playerName);
+
+        if(currentTicket.equals(Ticket.DoubleMove)){
+            doubleMoveException(currentTicket);
         }
         else {
-            goButtonLatch = 1;
-            currentTransportTicket = Ticket.Taxi;
-
-            List<Move> moves = theControllerUtilities.findMoves(Ticket.Taxi);
-
-            if (moves.size() == 0) {
-                //"No Taxi Tickets availible");
-            }
-
+            List<Move> moves = theControllerUtilities.findMoves(currentTicket);
             displayCurrentMoves(moves);
-        }
-    }
-
-    @Override
-    public void busTicketUsed(String playerName) {
-        System.out.println("Received at Controller bus " + playerName);
-
-        if(currentTransportTicket.equals(Ticket.DoubleMove) && goButtonLatch != 3){
-            doubleMoveException(Ticket.Bus);
-        }
-        else {
-            goButtonLatch = 1;
-            currentTransportTicket = Ticket.Bus;
-
-            List<Move> moves = theControllerUtilities.findMoves(Ticket.Bus);
-            if (moves.size() == 0) {
-                //theView.printConsole("No Bus Tickets availible");
-            }
-            displayCurrentMoves(moves);
-
-        }
-    }
-
-    @Override
-    public void UndergroundTicketUsed(String playerName) {
-        System.out.println("Received at Controller underground " + playerName);
-
-        if(currentTransportTicket.equals(Ticket.DoubleMove) && goButtonLatch != 3){
-            doubleMoveException(Ticket.Underground);
-        }
-        else {
-            goButtonLatch = 1;
-            currentTransportTicket = Ticket.Underground;
-
-            List<Move> moves = theControllerUtilities.findMoves(Ticket.Underground);
-
-            if (moves.size() == 0) {
-                //theView.printConsole("No Underground Tickets availible");
-            }
-                displayCurrentMoves(moves);
-
-        }
-    }
-
-    @Override
-    public void doubleMoveTicketUsed(String playerName) {
-        System.out.println("Received at Controller doublemove " + playerName);
-
-        goButtonLatch = 1;
-        currentTransportTicket = Ticket.DoubleMove;
-
-        List<Move> moves = theControllerUtilities.findMoves(Ticket.DoubleMove);
-
-        if (moves.size() == 0) {
-            //theView.printConsole("No Taxi Tickets availible");
-        }
-        displayCurrentMoves(moves);
-    }
-
-    @Override
-    public void secretMoveTicketUsed(String playerName) {
-        System.out.println("Received at Controller secret " + playerName);
-
-        if(currentTransportTicket.equals(Ticket.DoubleMove) && goButtonLatch != 3){
-            doubleMoveException(Ticket.SecretMove);
-        }
-        else {
-            goButtonLatch = 1;
-            currentTransportTicket = Ticket.SecretMove;
-
-
-            List<Move> moves = theControllerUtilities.findMoves(Ticket.SecretMove);
+            theView.activateSpecificButtonsPanelException(currentTicket.name(), false, theModel.getCurrentPlayer());
 
             if(moves.size() == 0){
                 //theView.printConsole("No Taxi Tickets availible");
             }
-
-            displayCurrentMoves(moves);
         }
+    }
 
+    public void unpressedButtonAction(String playerName, Ticket currentTicket) {
 
+        displayCurrentMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
+        theView.setCurrentPlayer(theModel.getCurrentPlayer());
 
     }
+
+
+
 
     @Override
     public void goButtonUsed(String playerName) {
@@ -219,22 +194,29 @@ public class Controller implements ControllerButtonListener {
         return theControllerUtilities.findMoveTicket(node1,currentTransportTicket);
     }
 
-    public void doubleMoveException(Ticket ticket) {
-        if (goButtonLatch == 1){
-            currentTransportTicket2 = ticket;
-            goButtonLatch = 2;
-            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,currentTransportTicket2, theControllerUtilities.moveDoubles);
-            displayCurrentMoves(movesSortedByTicketsNode1);
-        }
-        else if (goButtonLatch == 2 || goButtonLatch == 3){
-            //CTT1 = first node, CTT2 = second node
-            currentTransportTicket3 = ticket;
-            currentMove = findMove(selectedNode,selectedNode2);
-            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,currentTransportTicket2, theControllerUtilities.moveDoubles);
-            List<Move> movesSortedByTicketsNode1AND2 = theControllerUtilities.sortMoveDoubleByTicket(1, currentTransportTicket3, movesSortedByTicketsNode1);
-            displayCurrentMoves(movesSortedByTicketsNode1AND2);
-            goButtonLatch = 3;
-        }
+    public void doubleMoveException(Ticket currentTicket) {
+        //theView.activateSpecificButtonsPanelException(currentTicket.name(), false, theModel.getCurrentPlayer());
+        theControllerUtilities.showValidDoubleMoveTickets();
+        List<Move> moves = theControllerUtilities.findMoves(currentTicket);
+        displayCurrentMoves(moves);
+
+
+//
+//        if (goButtonLatch == 1){
+//            currentTransportTicket2 = ticket;
+//            goButtonLatch = 2;
+//            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,currentTransportTicket2, theControllerUtilities.moveDoubles);
+//            displayCurrentMoves(movesSortedByTicketsNode1);
+//        }
+//        else if (goButtonLatch == 2 || goButtonLatch == 3){
+//            //CTT1 = first node, CTT2 = second node
+//            currentTransportTicket3 = ticket;
+//            currentMove = findMove(selectedNode,selectedNode2);
+//            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,currentTransportTicket2, theControllerUtilities.moveDoubles);
+//            List<Move> movesSortedByTicketsNode1AND2 = theControllerUtilities.sortMoveDoubleByTicket(1, currentTransportTicket3, movesSortedByTicketsNode1);
+//            displayCurrentMoves(movesSortedByTicketsNode1AND2);
+//            goButtonLatch = 3;
+//        }
     }
 
 

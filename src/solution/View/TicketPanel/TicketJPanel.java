@@ -103,13 +103,25 @@ public class TicketJPanel extends JPanel implements ActionListener {
         }
     }
     //not used.
-    public void activateSpecificButtons (String buttonName, Boolean b, Colour currentPlayer){
+    public void activateSpecificButtons (String buttonName, Boolean b, Colour currentPlayer) {
         for (DetectiveJPanel detective : detectives) {
-            if (currentPlayer.name().equals(detective.PlayerName.getText()))
-                detective.activateDeactivateSpecificButtons(buttonName,b);
+            if ((currentPlayer.name().equals(detective.PlayerName.getText()))) {
+                detective.activateDeactivateSpecificButtons(buttonName, b);
+            }
+            if (currentPlayer.name().equals(mrX.PlayerName.getText())) {
+                mrX.activateDeactivateSpecificButtons(buttonName, b);
+            }
         }
-        if(currentPlayer.name().equals(mrX.PlayerName.getText())){
-            mrX.activateDeactivateSpecificButtons(buttonName,b);
+    }
+
+    public void activateSpecificButtonsException (String buttonName, Boolean b, Colour currentPlayer) {
+        for (DetectiveJPanel detective : detectives) {
+            if ((currentPlayer.name().equals(detective.PlayerName.getText()))) {
+                detective.activateDeactivateSpecificButtons(buttonName, b);
+            }
+            if (currentPlayer.name().equals(mrX.PlayerName.getText())) {
+                mrX.activateDeactivateSpecificButtons(buttonName, b);
+            }
         }
     }
 

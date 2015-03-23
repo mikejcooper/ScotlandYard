@@ -20,9 +20,9 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         //todo added string playername, to be able to identify object easily
 
         protected JLabel PlayerName = new JLabel("Initialise in Constructor");
-        protected JButton TaxiTicket = new JButton("Taxi");
-        protected JButton BusTicket = new JButton("Bus");
-        protected JButton UndergroundTicket = new JButton("Underground");
+        protected JToggleButton TaxiTicket = new JToggleButton("Taxi");
+        protected JToggleButton BusTicket = new JToggleButton("Bus");
+        protected JToggleButton UndergroundTicket = new JToggleButton("Underground");
         protected JLabel TaxiTicketValue = new JLabel("-1");
         protected JLabel BusTicketValue = new JLabel("-1");
         protected JLabel UndergroundTicketValue = new JLabel("-1");
@@ -105,13 +105,28 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
         Object source = e.getSource();
 
         if(source == TaxiTicket){
-            controllerButtonListener.taxiTicketUsed(PlayerName.getText());
+            if (TaxiTicket.isSelected()){
+                controllerButtonListener.taxiTicketPressed(PlayerName.getText());
+            }
+            else {
+                controllerButtonListener.taxiTicketUnpressed(PlayerName.getText());
+            }
         }
         if(source == BusTicket){
-            controllerButtonListener.busTicketUsed(PlayerName.getText());
+            if (BusTicket.isSelected()){
+                controllerButtonListener.busTicketPressed(PlayerName.getText());
+            }
+            else {
+                controllerButtonListener.busTicketUnpressed(PlayerName.getText());
+            }
         }
         if(source == UndergroundTicket){
-            controllerButtonListener.UndergroundTicketUsed(PlayerName.getText());
+            if (UndergroundTicket.isSelected()){
+                controllerButtonListener.undergroundTicketPressed(PlayerName.getText());
+            }
+            else {
+                controllerButtonListener.undergroundTicketUnpressed(PlayerName.getText());
+            }
         }
     }
 
@@ -121,17 +136,28 @@ public abstract class TemplatePlayerJPanel extends JPanel implements ActionListe
             UndergroundTicket.setEnabled(b);
     }
 
+    public void activateDeactivateSpecificButtonsException (String buttonName, Boolean b){
+        if(!buttonName.equals(TaxiTicket.getText())){
+            TaxiTicket.setEnabled(b);
+        }
+        if (!buttonName.equals(BusTicket.getText())){
+            BusTicket.setEnabled(b);
+        }
+        if (!buttonName.equals(UndergroundTicket.getText())){
+            UndergroundTicket.setEnabled(b);
+        }
+    }
+
     public void activateDeactivateSpecificButtons (String buttonName, Boolean b){
         if(buttonName.equals(TaxiTicket.getText())){
             TaxiTicket.setEnabled(b);
         }
-        else if (buttonName.equals(BusTicket.getText())){
+        if (buttonName.equals(BusTicket.getText())){
             BusTicket.setEnabled(b);
         }
-        else if (buttonName.equals(UndergroundTicket.getText())){
+        if (buttonName.equals(UndergroundTicket.getText())){
             UndergroundTicket.setEnabled(b);
         }
-
     }
 
 
