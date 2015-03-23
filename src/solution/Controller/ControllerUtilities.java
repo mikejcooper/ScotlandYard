@@ -10,17 +10,17 @@ import java.util.List;
 /**
  * Created by MikeCooper on 19/03/15.
  */
-public class ModelController {
+public class ControllerUtilities {
 
     List<MoveTicket> moveTickets;
-    List<MoveDouble> moveDoubles;
+    List<Move> moveDoubles;
     List<MovePass> movePasses;
 
     ScotlandYardModel theModel;
     View theView;
 
     //input the model
-    public ModelController (ScotlandYardModel theModel, View theView){
+    public ControllerUtilities(ScotlandYardModel theModel, View theView){
         this.theModel = theModel;
         this.theView = theView;
         initialiseView();
@@ -28,14 +28,11 @@ public class ModelController {
 
     private void initialiseView () {
         addPlayersToView();
-        loadTicketValues();
         checkTurn();
-        sortMoves();
-        showCurrentValidMoves();
-
+        showCurrentValidMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
     }
 
-
+    //initialise Players
     public void addPlayersToView() {
         for (Colour player : theModel.getPlayers()) {
             theView.addPlayer(player, theModel.getColourGamePlayerMap().get(player).getTickets());
@@ -43,6 +40,7 @@ public class ModelController {
         theView.setPlayerPanel();
     }
 
+    //Updates ticket values.
     public void loadTicketValues () {
         for (Colour colour : theModel.getPlayers()) {
             theView.updateTicketValues(colour, theModel.getColourGamePlayerMap().get(colour).getTickets());
@@ -50,18 +48,72 @@ public class ModelController {
         }
     }
 
+    public void playMove (Move move){
+        theModel.makeMove(move);
+    }
+
     public void checkTurn() {
+        //Ghosts correct tickets based on current player.
         theView.setCurrentPlayer(theModel.getCurrentPlayer());
+        ////Updates ticket values.
+        loadTicketValues();
+        sortMoves();
     }
 
-    public void showCurrentValidMoves () {
-        theView.currentMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
+    public void nextPlayer(){
+        theModel.getNextPlayer();
+        checkTurn();
 
+        //add?
+    }
+
+    public void showCurrentValidMoves (List<Move> moves) {
+        theView.activateAllButtonsMap(false);
+
+        List<MoveTicket> moveTicketsTemp = new ArrayList<MoveTicket>();
+        List<MoveDouble> moveDoublesTemp = new ArrayList<MoveDouble>();
+
+        for (Move move : moves) {
+            if (move instanceof MoveTicket) {
+                moveTicketsTemp.add((MoveTicket) move);
+            }
+            else if (move instanceof MoveDouble){
+                moveDoublesTemp.add((MoveDouble) move);
+            }
+        }
+
+        if(moveDoublesTemp.size() == 0 && moveDoublesTemp.size() == 0){
+           //something with movepass.
+        }
+        else {
+            showMoveTickets(moveTicketsTemp);
+            showMoveDoubles(moveDoublesTemp);
+        }
+    }
+
+    private void showMoveDoubles(List<MoveDouble> moveDoublesTemp) {
+        for (MoveDouble moveDouble : moveDoublesTemp) {
+            for (Move move : moveDouble.moves) {
+                if (move instanceof MoveTicket){
+                    theView.activateSpecificButtonsMap(String.valueOf(((MoveTicket) move).target),true);
+                }
+            }
+        }
+    }
+
+    private void showMoveTickets(List<MoveTicket> moveTicketsTemp) {
+        for (MoveTicket moveTicket : moveTicketsTemp) {
+            theView.activateSpecificButtonsMap(String.valueOf(moveTicket.target),true);
+        }
     }
 
 
+//Functions for searching based on UI.
+
+    //finds all possible moves allowed using this.ticket
     public List<Move> findMoves (Ticket ticket) {
         List<Move> moves = new ArrayList<Move>();
+
         if(ticket.name().equals("DoubleMove")) {
             moves.addAll(moveDoubles);
         }
@@ -73,29 +125,16 @@ public class ModelController {
             }
         }
 
-        if(moves.size() == 0){
+        if (moves.size() == 0){
             moves.addAll(movePasses);
         }
+
         return moves;
     }
 
-    public void playMove (Move move){
-        theModel.makeMove(move);
-    }
-
-    public void nextPlayer(){
-        loadTicketValues();
-        theModel.getNextPlayer();
-        checkTurn();
-        sortMoves();
-        showCurrentValidMoves();
-    }
-
-
-
     public void sortMoves () {
         moveTickets = new ArrayList<MoveTicket>();
-        moveDoubles = new ArrayList<MoveDouble>();
+        moveDoubles = new ArrayList<Move>();
         movePasses = new ArrayList<MovePass>();
         for (Move move : theModel.getValidMoves(theModel.getCurrentPlayer())) {
             if (move instanceof MoveTicket) {
@@ -109,16 +148,14 @@ public class ModelController {
             }
         }
     }
-
-
     //finds MOVE
     public Move findDoubleMoveTicket (int node1, int node2, Ticket currentTransportTicket, Ticket currentTransportTicket2) {
         Move move = null;
-            for (MoveDouble moveDouble : moveDoubles) {
-                if (findMoveDouble(moveDouble, node1, node2,currentTransportTicket,currentTransportTicket2)) {
-                    move = moveDouble;
+            for (Move moveDouble : moveDoubles) {
+                    if (findMoveDouble((MoveDouble) moveDouble, node1, node2, currentTransportTicket, currentTransportTicket2)) {
+                        move = moveDouble;
+                    }
                 }
-            }
         return move;
     }
 
@@ -152,20 +189,20 @@ public class ModelController {
             }
             return false;
     }
-
-
-
     //could cause rare bug.
-    public List<MoveDouble> sortMoveDoubleByTicket(int firstOrSendMoveTicket,Ticket methodOfTransport, List<MoveDouble> inputDoublesList) {
-        List<MoveDouble> moves = new ArrayList<MoveDouble>();
-        for (MoveDouble moveDouble : inputDoublesList) {
-            MoveTicket move = (MoveTicket) moveDouble.moves.get(firstOrSendMoveTicket);
-            if (((MoveTicket) move).ticket == methodOfTransport) {
-                moves.add(moveDouble);
+    public List<Move> sortMoveDoubleByTicket(int firstOrSendMoveTicket,Ticket methodOfTransport, List<Move> inputDoublesList) {
+        List<Move> moves = new ArrayList<Move>();
+        for (Move moveDouble : inputDoublesList) {
+            if(moveDouble instanceof MoveDouble) {
+                MoveTicket move = (MoveTicket) ((MoveDouble) moveDouble).moves.get(firstOrSendMoveTicket);
+                if (((MoveTicket) move).ticket == methodOfTransport) {
+                    moves.add(moveDouble);
+                }
             }
         }
         return moves;
     }
+
 
 
 }

@@ -64,7 +64,7 @@ public class GraphDisplay {
         String topLine = in.nextLine();
 
         //todo scale each node!
-        for(int i = 1; i < Integer.parseInt(topLine) ; i++)
+        for(int i = 0; i < Integer.parseInt(topLine) ; i++)
         {
             String line = in.nextLine();
             String[] parts = line.split(" ");

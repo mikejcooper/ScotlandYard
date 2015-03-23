@@ -4,9 +4,6 @@ import solution.Controller.Interfaces.ControllerButtonListener;
 import solution.Model.ScotlandYardModel;
 import solution.View.View;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,7 +58,7 @@ public class Controller implements ControllerButtonListener {
 
     ScotlandYardModel theModel;
     View theView;
-    ModelController theModelController;
+    ControllerUtilities theControllerUtilities;
     private Ticket currentTransportTicket = Ticket.Bus;
     private Ticket currentTransportTicket2 = Ticket.Bus;
     private Ticket currentTransportTicket3 = Ticket.Bus;
@@ -75,7 +72,7 @@ public class Controller implements ControllerButtonListener {
     public Controller (ScotlandYardModel theModel, View theView){
         this.theModel = theModel;
         this.theView = theView;
-        this.theModelController = new ModelController(theModel,theView);
+        this.theControllerUtilities = new ControllerUtilities(theModel,theView);
         theView.setControllerPrivileges(this);
         selectedNode = theModel.getPlayerLocation(theModel.getCurrentPlayer());
     }
@@ -92,16 +89,15 @@ public class Controller implements ControllerButtonListener {
         }
         else {
             goButtonLatch = 1;
-            theView.clearConsole();
             currentTransportTicket = Ticket.Taxi;
 
-            List<Move> moves = theModelController.findMoves(Ticket.Taxi);
+            List<Move> moves = theControllerUtilities.findMoves(Ticket.Taxi);
 
             if (moves.size() == 0) {
-                theView.printConsole("No Taxi Tickets availible");
-            } else {
-                theView.currentMoves(moves);
+                //"No Taxi Tickets availible");
             }
+
+            displayCurrentMoves(moves);
         }
     }
 
@@ -114,15 +110,14 @@ public class Controller implements ControllerButtonListener {
         }
         else {
             goButtonLatch = 1;
-            theView.clearConsole();
             currentTransportTicket = Ticket.Bus;
 
-            List<Move> moves = theModelController.findMoves(Ticket.Bus);
+            List<Move> moves = theControllerUtilities.findMoves(Ticket.Bus);
             if (moves.size() == 0) {
-                theView.printConsole("No Bus Tickets availible");
-            } else {
-                theView.currentMoves(moves);
+                //theView.printConsole("No Bus Tickets availible");
             }
+            displayCurrentMoves(moves);
+
         }
     }
 
@@ -135,16 +130,15 @@ public class Controller implements ControllerButtonListener {
         }
         else {
             goButtonLatch = 1;
-            theView.clearConsole();
             currentTransportTicket = Ticket.Underground;
 
-            List<Move> moves = theModelController.findMoves(Ticket.Underground);
+            List<Move> moves = theControllerUtilities.findMoves(Ticket.Underground);
 
             if (moves.size() == 0) {
-                theView.printConsole("No Underground Tickets availible");
-            } else {
-                theView.currentMoves(moves);
+                //theView.printConsole("No Underground Tickets availible");
             }
+                displayCurrentMoves(moves);
+
         }
     }
 
@@ -152,17 +146,15 @@ public class Controller implements ControllerButtonListener {
     public void doubleMoveTicketUsed(String playerName) {
         System.out.println("Received at Controller doublemove " + playerName);
 
-            goButtonLatch = 1;
-            theView.clearConsole();
-            currentTransportTicket = Ticket.DoubleMove;
+        goButtonLatch = 1;
+        currentTransportTicket = Ticket.DoubleMove;
 
-            List<Move> moves = theModelController.findMoves(Ticket.DoubleMove);
+        List<Move> moves = theControllerUtilities.findMoves(Ticket.DoubleMove);
 
-            if (moves.size() == 0) {
-                theView.printConsole("No Taxi Tickets availible");
-            } else {
-                theView.currentMoves(moves);
-            }
+        if (moves.size() == 0) {
+            //theView.printConsole("No Taxi Tickets availible");
+        }
+        displayCurrentMoves(moves);
     }
 
     @Override
@@ -174,19 +166,16 @@ public class Controller implements ControllerButtonListener {
         }
         else {
             goButtonLatch = 1;
-            theView.clearConsole();
             currentTransportTicket = Ticket.SecretMove;
 
 
-            List<Move> moves = theModelController.findMoves(Ticket.SecretMove);
+            List<Move> moves = theControllerUtilities.findMoves(Ticket.SecretMove);
 
             if(moves.size() == 0){
-                theView.printConsole("No Taxi Tickets availible");
-            }
-            else{
-                theView.currentMoves(moves);
+                //theView.printConsole("No Taxi Tickets availible");
             }
 
+            displayCurrentMoves(moves);
         }
 
 
@@ -199,69 +188,83 @@ public class Controller implements ControllerButtonListener {
 
         if (goButtonLatch == 0 || goButtonLatch == 2) {
             theModel.makeMove(currentMove);
-            theModelController.nextPlayer();
+            theControllerUtilities.nextPlayer();
         }
     }
 
-//Node input
     @Override
-    public void textInput(String input) {
+    public void mapButton(String nodeNumber) {
+        System.out.println("controller"+nodeNumber);
+
         if(currentTransportTicket.equals(Ticket.DoubleMove)){
             if (goButtonLatch == 2){
-                selectedNode2 = Integer.parseInt(input);
+                selectedNode2 = Integer.parseInt(nodeNumber);
             }
             else if (goButtonLatch == 3){
-                selectedNode = Integer.parseInt(input);
+                selectedNode = Integer.parseInt(nodeNumber);
             }
         }
         else {
-            selectedNode = Integer.parseInt(input);
+            selectedNode = Integer.parseInt(nodeNumber);
             currentMove = findMove(selectedNode);
             goButtonLatch = 0;
         }
-
     }
 
-
     public Move findMove(int node1, int node2) {
-        return theModelController.findDoubleMoveTicket(node1, node2, currentTransportTicket, currentTransportTicket);
+        return theControllerUtilities.findDoubleMoveTicket(node1, node2, currentTransportTicket, currentTransportTicket);
     }
 
     public Move findMove (int node1) {
-        return theModelController.findMoveTicket(node1,currentTransportTicket);
+        return theControllerUtilities.findMoveTicket(node1,currentTransportTicket);
     }
 
     public void doubleMoveException(Ticket ticket) {
         if (goButtonLatch == 1){
             currentTransportTicket2 = ticket;
             goButtonLatch = 2;
-            List<MoveDouble> movesSortedByTicketsNode1 = theModelController.sortMoveDoubleByTicket(0,currentTransportTicket2,theModelController.moveDoubles);
-            displayDoubleMoves(movesSortedByTicketsNode1);
+            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,currentTransportTicket2, theControllerUtilities.moveDoubles);
+            displayCurrentMoves(movesSortedByTicketsNode1);
         }
         else if (goButtonLatch == 2 || goButtonLatch == 3){
             //CTT1 = first node, CTT2 = second node
             currentTransportTicket3 = ticket;
             currentMove = findMove(selectedNode,selectedNode2);
-            List<MoveDouble> movesSortedByTicketsNode1 = theModelController.sortMoveDoubleByTicket(0,currentTransportTicket2,theModelController.moveDoubles);
-            List<MoveDouble> movesSortedByTicketsNode1AND2 = theModelController.sortMoveDoubleByTicket(1, currentTransportTicket3, movesSortedByTicketsNode1);
-            displayDoubleMoves(movesSortedByTicketsNode1AND2);
+            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,currentTransportTicket2, theControllerUtilities.moveDoubles);
+            List<Move> movesSortedByTicketsNode1AND2 = theControllerUtilities.sortMoveDoubleByTicket(1, currentTransportTicket3, movesSortedByTicketsNode1);
+            displayCurrentMoves(movesSortedByTicketsNode1AND2);
             goButtonLatch = 3;
         }
     }
 
 
-    public void displayDoubleMoves(List<MoveDouble> moves){
-            theView.clearConsole();
 
-            if(moves.size() == 0){
-                theView.printConsole("No Taxi Tickets availible");
-            }
-            else{
-                theView.currentMovesDoubles(moves);
-            }
+    public void displayCurrentMoves(List<Move> moves) {
+        //reset all button to off
+        theView.activateAllButtonsMap(false);
+
+        if(moves.size() == 0){
+            //"ERROR";
+        }
+        //activate buttons valid for move
+        for (Move move : moves) {
+            displayMove(move);
+        }
     }
 
 
+    public void displayMove(Move move) {
+        if(move instanceof MoveTicket){
+            theView.activateSpecificButtonsMap((String.valueOf(((MoveTicket) move).target)),true);
+        }
+        else if (move instanceof MoveDouble){
+            for (Move move1 : ((MoveDouble) move).moves) {
+                if (move1 instanceof MoveTicket){
+                    theView.activateSpecificButtonsMap((String.valueOf(((MoveTicket) move1).target)),true);
+                }
+            }
+        }
+    }
 
 }
 

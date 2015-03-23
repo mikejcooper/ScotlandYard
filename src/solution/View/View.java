@@ -8,8 +8,12 @@ import solution.Controller.Controller;
 import solution.View.MapPanel.MapJPanel;
 import solution.View.TicketPanel.TicketJPanel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -22,7 +26,8 @@ public class View extends JFrame {
 
     private MapJPanel mapJPanel;
     private TicketJPanel ticketJPanel;
-    private TextEditJFrame textEditJFrame;
+
+
 
     public View() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -30,14 +35,20 @@ public class View extends JFrame {
 
         ticketJPanel = new TicketJPanel();
         mapJPanel = new MapJPanel();
-        textEditJFrame = new TextEditJFrame();
 
-
+        //manual image size
+        Dimension d = new Dimension(1200,600);
+        mapJPanel.setMaximumSize(d);
+        mapJPanel.setMinimumSize(d);
+        mapJPanel.setPreferredSize(d);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
 
+       //todo background
+       // loadBackgroundImage();
         setJFrameLayout();
+
 
         //pack();
 
@@ -64,10 +75,27 @@ public class View extends JFrame {
         gbc.gridy = 1;
         add(ticketJPanel, gbc);
     }
+
+    private void loadBackgroundImage() {
+
+
+        BufferedImage background = null;
+        try
+        {
+            background = ImageIO.read(new File("background.jpg"));
+        }
+        catch( IOException e )
+        {
+            System.out.println(e);
+        }
+        this.setContentPane(new ImagePanel(background));
+
+}
+
     public void setControllerPrivileges(Controller controller) {
         //allow controller to access certain parts -
         ticketJPanel.setControllerPrivileges(controller);
-        textEditJFrame.buttonListener(controller);
+        mapJPanel.buttonListener(controller);
     }
 
     //added to global variables.
@@ -92,35 +120,36 @@ public class View extends JFrame {
 
     //----------------------
 
-    public void currentMoves(List<Move> moves) {
-        clearConsole();
-        if(moves.size() == 0){
-            textEditJFrame.setOutput("ERROR");
-        }
-        for (Move move : moves) {
-            textEditJFrame.setOutput(move.toString());
-        }
-    }
-///WANT TO COMBINE WITH ABOVE BUT CANNOT.
-    public void currentMovesDoubles(List<MoveDouble> moves) {
-        clearConsole();
-        if (moves.size() == 0) {
-            textEditJFrame.setOutput("ERROR");
-        }
-        for (MoveDouble move : moves) {
-            textEditJFrame.setOutput(move.toString());
-        }
-    }
 
-    public void printConsole(String string) {
-        textEditJFrame.setOutput(string);
-    }
-    public void clearConsole() {
-        textEditJFrame.output.setText("");
-    }
-
-    public void activateSpecificButtons (String buttonName, Boolean b, Colour currentPlayer){
+    public void activateSpecificButtonsPanel (String buttonName, Boolean b, Colour currentPlayer){
         ticketJPanel.activateSpecificButtons(buttonName,b,currentPlayer);
     }
 
+    public void activateSpecificButtonsMap (String nodeName, Boolean b){
+        mapJPanel.activateDeactivateSpecificButtons(nodeName,b);
+    }
+
+    public void activateAllButtonsMap(Boolean b){
+        mapJPanel.activateDeactivateButtons(b);
+    }
+
+
+    class ImagePanel extends JComponent {
+        private Image image;
+        public ImagePanel(Image image) {
+            this.image = image;
+        }
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(image, 0, 0, this);
+        }
+    }
+
+
+
+
 }
+
+
+

@@ -12,8 +12,8 @@ public interface ControllerButtonListener {
     public void secretMoveTicketUsed(String playerName);
     public void goButtonUsed(String playerName);
 
+    public void mapButton (String nodeNumber);
 
-    public void textInput(String input);
 
 
 

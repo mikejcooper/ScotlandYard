@@ -2,10 +2,13 @@ package solution.View.MapPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
 * Created by gebruiker on 18/03/2015.
 */
+
 public class ButtonHolder extends JButton {
     private double xCoordinate;
     private double yCoordinate;
