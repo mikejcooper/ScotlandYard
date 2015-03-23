@@ -21,14 +21,12 @@ public class MapJPanel extends JPanel implements ActionListener {
 
     public MapJPanel() {
         this.graphDisplay = new GraphDisplay();
-        NodePosition nodePosition = new NodePosition();
 
-        try {
-            nodePosition.read(graphDisplay.getCoordinateMap(), graphDisplay.getWidthOfImage(), graphDisplay.getHeightOfImage());
-        } catch (IOException e) {
-            System.exit(1);
-        }
-        this.buttons = nodePosition.getButtonSet();
+
+        this.buttons = graphDisplay.getButtonSet();
+
+        this.setOpaque(true);
+        this.setBackground(new Color(0,0,0,0));
 
         add(graphDisplay.getMap());
 

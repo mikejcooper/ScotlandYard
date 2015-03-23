@@ -29,18 +29,22 @@ public class View extends JFrame {
 
 
 
+
     public View() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1300, 800);
+
+
+        setBackground();
 
         ticketJPanel = new TicketJPanel();
         mapJPanel = new MapJPanel();
 
         //manual image size
-        Dimension d = new Dimension(1200,600);
-        mapJPanel.setMaximumSize(d);
-        mapJPanel.setMinimumSize(d);
-        mapJPanel.setPreferredSize(d);
+//        Dimension d = new Dimension(1200,600);
+//        mapJPanel.setMaximumSize(d);
+//        mapJPanel.setMinimumSize(d);
+//        mapJPanel.setPreferredSize(d);
 
         gbc = new GridBagConstraints();
         setLayout(new GridBagLayout());
@@ -131,6 +135,24 @@ public class View extends JFrame {
 
     public void activateAllButtonsMap(Boolean b){
         mapJPanel.activateDeactivateButtons(b);
+    }
+
+    private void setBackground(){
+        Image img = null;
+        try
+        {
+            img = ImageIO.read(new File("background.jpg"));
+        }
+        catch( IOException e )
+        {
+            System.out.println(e);
+        }
+
+        //ImageIcon background = new ImageIcon("background.jpg");
+        assert img != null;
+        Image scaleImage = img.getScaledInstance(1500, 1000, Image.SCALE_SMOOTH);
+        ImageIcon background = new ImageIcon(scaleImage);
+        setContentPane(new JLabel(background));
     }
 
 
