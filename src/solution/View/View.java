@@ -131,7 +131,7 @@ public class View extends JFrame {
         ticketJPanel.activateSpecificButtonsException(buttonName,b,currentPlayer);
     }
     public void activateSpecificButtonsPanel (String buttonName, Boolean b, Colour currentPlayer){
-        ticketJPanel.activateSpecificButtonsException(buttonName,b,currentPlayer);
+        ticketJPanel.activateSpecificButtons(buttonName,b,currentPlayer);
     }
 
 

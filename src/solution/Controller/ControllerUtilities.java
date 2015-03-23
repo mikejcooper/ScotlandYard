@@ -161,14 +161,20 @@ public class ControllerUtilities {
     }
 
 
-    public void showValidDoubleMoveTickets(){
-        for (Move moveDouble : moveDoubles) {
-            if(moveDouble instanceof MoveDouble){
-                theView.activateSpecificButtonsPanel(((MoveTicket)((MoveDouble) moveDouble).moves.get(0)).ticket.toString(),false,theModel.getCurrentPlayer());
+    public void showValidDoubleMoveTicketsFirstMove(List<Move> moves){
+        for (Move move : moves) {
+            if(move instanceof MoveDouble){
+                theView.activateSpecificButtonsPanel(((MoveTicket)((MoveDouble) move).moves.get(0)).ticket.toString(),true,theModel.getCurrentPlayer());
             }
-
         }
+    }
 
+    public void showValidDoubleMoveTicketsSecondMove(List<Move> moves){
+        for (Move move : moves) {
+            if(move instanceof MoveDouble){
+                theView.activateSpecificButtonsPanel(((MoveTicket)((MoveDouble) move).moves.get(1)).ticket.toString(),true,theModel.getCurrentPlayer());
+            }
+        }
     }
 
     private Boolean findMoveDouble(MoveDouble moveDouble, int node1, int node2, Ticket currentTransportTicket, Ticket currentTransportTicket2) {

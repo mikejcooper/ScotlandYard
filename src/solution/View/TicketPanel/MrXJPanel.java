@@ -99,6 +99,17 @@ public class MrXJPanel extends TemplatePlayerJPanel {
     @Override
     public void activateDeactivateSpecificButtons (String buttonName, Boolean b) {
         super.activateDeactivateSpecificButtons(buttonName,b);
+        if ((buttonName.equals(SecretMoveTicket.getText()))) {
+            SecretMoveTicket.setEnabled(b);
+        }
+        if ((buttonName.equals(DoubleMoveTicket.getText()))) {
+            DoubleMoveTicket.setEnabled(b);
+        }
+    }
+
+    @Override
+    public void activateDeactivateSpecificButtonsException (String buttonName, Boolean b) {
+        super.activateDeactivateSpecificButtonsException(buttonName, b);
         if (!(buttonName.equals(SecretMoveTicket.getText()))) {
             SecretMoveTicket.setEnabled(b);
         }

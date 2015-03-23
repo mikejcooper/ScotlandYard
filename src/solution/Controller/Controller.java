@@ -62,11 +62,14 @@ public class Controller implements ControllerButtonListener {
     private Ticket currentTransportTicket = Ticket.Bus;
     private Ticket currentTransportTicket2 = Ticket.Bus;
     private Ticket currentTransportTicket3 = Ticket.Bus;
+    private Ticket currentTransportTicket4 = Ticket.Bus;
     private Move currentMove;
     private Move currentMove2;
     int goButtonLatch = 1; // 0 = Move is ready to 'play', 1 = 'normal views displayed to user', 2 = '1st step in doubleMove, 2 = 2nd step.
     int selectedNode;
     int selectedNode2;
+
+    int doubleMoveToggle = 0;
 
     //input the model
     public Controller (ScotlandYardModel theModel, View theView){
@@ -96,7 +99,9 @@ public class Controller implements ControllerButtonListener {
 
     @Override
     public void doubleMoveTicketPressed(String playerName) {
+        doubleMoveToggle = 1;
         pressedButtonAction(playerName,Ticket.DoubleMove);
+
     }
 
     @Override
@@ -121,6 +126,7 @@ public class Controller implements ControllerButtonListener {
 
     @Override
     public void doubleMoveTicketUnpressed(String playerName) {
+        doubleMoveToggle = 0;
         unpressedButtonAction(playerName,Ticket.DoubleMove);
     }
 
@@ -133,8 +139,8 @@ public class Controller implements ControllerButtonListener {
     public void pressedButtonAction(String playerName, Ticket currentTicket){
         System.out.println("button recieved at controller" + playerName);
 
-        if(currentTicket.equals(Ticket.DoubleMove)){
-            doubleMoveException(currentTicket);
+        if(doubleMoveToggle == 1){
+            doubleMovePressed(currentTicket);
         }
         else {
             List<Move> moves = theControllerUtilities.findMoves(currentTicket);
@@ -149,6 +155,9 @@ public class Controller implements ControllerButtonListener {
 
     public void unpressedButtonAction(String playerName, Ticket currentTicket) {
 
+        if (currentTransportTicket4.equals(Ticket.DoubleMove)){
+            doubleMoveUnpressed(currentTicket);
+        }
         displayCurrentMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
         theView.setCurrentPlayer(theModel.getCurrentPlayer());
 
@@ -194,11 +203,80 @@ public class Controller implements ControllerButtonListener {
         return theControllerUtilities.findMoveTicket(node1,currentTransportTicket);
     }
 
-    public void doubleMoveException(Ticket currentTicket) {
-        //theView.activateSpecificButtonsPanelException(currentTicket.name(), false, theModel.getCurrentPlayer());
-        theControllerUtilities.showValidDoubleMoveTickets();
-        List<Move> moves = theControllerUtilities.findMoves(currentTicket);
-        displayCurrentMoves(moves);
+
+    Ticket ticket1 = Ticket.DoubleMove;
+    Ticket ticket2 = Ticket.DoubleMove;
+
+    public void doubleMovePressed(Ticket currentTicket) {
+        if(currentTicket.equals(Ticket.DoubleMove)) {
+            doubleMoveSortMapTickets();
+        }
+        else {
+            if(ticket1.equals(Ticket.DoubleMove)){
+                ticket1 = currentTicket;
+                doubleMoveSortMapTickets();
+            }
+            else if(ticket2.equals(Ticket.DoubleMove)) {
+                ticket2 = currentTicket;
+                doubleMoveSortMapTickets();
+            }
+        }
+    }
+
+    public void doubleMoveUnpressed(Ticket currentTicket) {
+        if (currentTicket.equals(ticket1)) {
+            ticket1 = ticket2;
+            ticket2 = Ticket.DoubleMove;
+            doubleMoveSortMapTickets();
+        }
+        else {
+            ticket2 = Ticket.DoubleMove;
+            doubleMoveSortMapTickets();
+        }
+    }
+
+
+
+
+    public void doubleMoveSortMapTickets() {
+        if (ticket1.equals(Ticket.DoubleMove) && ticket2.equals(Ticket.DoubleMove)){
+            displayCurrentMoves(theControllerUtilities.moveDoubles);
+            theControllerUtilities.showValidDoubleMoveTicketsFirstMove(theControllerUtilities.moveDoubles);
+        }
+        else if (ticket2.equals(Ticket.DoubleMove)){
+            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,ticket1, theControllerUtilities.moveDoubles);
+            displayCurrentMoves(movesSortedByTicketsNode1);
+            theControllerUtilities.showValidDoubleMoveTicketsSecondMove(movesSortedByTicketsNode1);
+        }
+        else {
+            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,ticket1, theControllerUtilities.moveDoubles);
+            List<Move> movesSortedByTicketsNode1AND2 = theControllerUtilities.sortMoveDoubleByTicket(1, ticket2, movesSortedByTicketsNode1);
+            displayCurrentMoves(movesSortedByTicketsNode1AND2);
+            theControllerUtilities.showValidDoubleMoveTicketsSecondMove(movesSortedByTicketsNode1AND2);
+        }
+    }
+
+
+    public void doubleMoveException2() {
+       //1st time double move is pressed
+        if (currentTransportTicket3.equals(Ticket.DoubleMove)) {
+            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,currentTransportTicket2, theControllerUtilities.moveDoubles);
+            List<Move> movesSortedByTicketsNode1AND2 = theControllerUtilities.sortMoveDoubleByTicket(1, currentTransportTicket, movesSortedByTicketsNode1);
+            displayCurrentMoves(movesSortedByTicketsNode1AND2);
+        }
+        else if (currentTransportTicket2.equals(Ticket.DoubleMove)){
+            List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,currentTransportTicket, theControllerUtilities.moveDoubles);
+            displayCurrentMoves(movesSortedByTicketsNode1);
+            theControllerUtilities.showValidDoubleMoveTicketsSecondMove(movesSortedByTicketsNode1);
+        }
+        else if (currentTransportTicket.equals(Ticket.DoubleMove)){
+            theView.activateSpecificButtonsPanelException("DoubleMove", false, Colour.Black);
+            theControllerUtilities.showValidDoubleMoveTicketsFirstMove(theControllerUtilities.moveDoubles);
+            List<Move> moves = theControllerUtilities.findMoves(Ticket.DoubleMove);
+            displayCurrentMoves(moves);
+        }
+
+
 
 
 //
