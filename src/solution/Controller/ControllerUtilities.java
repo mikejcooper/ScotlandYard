@@ -29,7 +29,6 @@ public class ControllerUtilities {
     private void initialiseView () {
         addPlayersToView();
         checkTurn();
-        showCurrentValidMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
     }
 
     //initialise Players
@@ -59,13 +58,22 @@ public class ControllerUtilities {
         loadTicketValues();
         sortMoves();
         showValidTickets(theModel.getValidMoves(theModel.getCurrentPlayer()));
+        showCurrentValidMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
+        displayCurrentMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
+        theView.unpressAllButtonsMap();
+        theView.goButtonToggle(false);
+
+        if(theModel.getValidMoves(theModel.getCurrentPlayer()).size() == 0){
+            //skip player
+        }
+        if(theModel.isGameOver()){
+            //winners
+        }
     }
 
     public void nextPlayer(){
         theModel.getNextPlayer();
         checkTurn();
-
-        //add?
     }
 
     public void showCurrentValidMoves (List<Move> moves) {
@@ -83,13 +91,8 @@ public class ControllerUtilities {
             }
         }
 
-        if(moveDoublesTemp.size() == 0 && moveDoublesTemp.size() == 0){
-           //something with movepass.
-        }
-        else {
             showMoveTickets(moveTicketsTemp);
             showMoveDoubles(moveDoublesTemp);
-        }
     }
 
     private void showMoveDoubles(List<MoveDouble> moveDoublesTemp) {
@@ -237,5 +240,32 @@ public class ControllerUtilities {
     }
 
 
+
+    public void displayCurrentMoves(List<Move> moves) {
+        //reset all button to off
+        theView.activateAllButtonsMap(false);
+
+        if(moves.size() == 0){
+            //"ERROR";
+        }
+        //activate buttons valid for move
+        for (Move move : moves) {
+            displayMove(move);
+        }
+    }
+
+
+    public void displayMove(Move move) {
+        if(move instanceof MoveTicket){
+            theView.activateSpecificButtonsMap((String.valueOf(((MoveTicket) move).target)),true);
+        }
+        else if (move instanceof MoveDouble){
+            for (Move move1 : ((MoveDouble) move).moves) {
+                if (move1 instanceof MoveTicket){
+                    theView.activateSpecificButtonsMap((String.valueOf(((MoveTicket) move1).target)),true);
+                }
+            }
+        }
+    }
 
 }

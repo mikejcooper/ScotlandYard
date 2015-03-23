@@ -181,6 +181,10 @@ public class View extends JPanel {
         return mapJPanel.findSelectedButtons();
     }
 
+    public void unpressAllButtonsMap() {
+        mapJPanel.unpressAllButtonsMap();
+    }
+
 }
 
 

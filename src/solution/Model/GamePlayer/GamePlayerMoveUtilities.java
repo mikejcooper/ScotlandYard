@@ -83,9 +83,7 @@ public class GamePlayerMoveUtilities {
                 }
             }
         }
-
         return moveList;
-
     }
 
     protected List<Move> filterMovesByTickets (Map<Ticket,Integer> ticketMap, List<Move> moveList) {

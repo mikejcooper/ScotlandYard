@@ -91,4 +91,11 @@ public class MapJPanel extends JPanel implements ActionListener {
         }
         return buttonList;
     }
+
+    public void unpressAllButtonsMap() {
+        for (ButtonHolder button : buttons) {
+            button.setSelected(false);
+        }
+
+    }
 }
