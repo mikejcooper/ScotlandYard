@@ -112,6 +112,7 @@ public class Controller implements ControllerButtonListener {
         this.theControllerUtilities = new ControllerUtilities(theModel,theView);
         theView.setControllerPrivileges(this);
         theView.setControllerPrivileges(this);
+        theView.getMapJPanel().circleButtons(theModel.getColourToLocationMap());
     }
     @Override
     public void minusButtonPressed(){
@@ -163,11 +164,15 @@ public class Controller implements ControllerButtonListener {
             if (doubleMoveToggle == 1){
                 Move move = theControllerUtilities.findDoubleMoveTicket(Integer.parseInt(currentNode1), Integer.parseInt(currentNode2), ticket1, ticket2);
                 theControllerUtilities.playMove(move);
+                theView.getMapJPanel().getRidOfAllBorders();
+                theView.getMapJPanel().circleButtons(theModel.getColourToLocationMap());
                 theControllerUtilities.nextPlayer();
             }
             else {
                 Move move = theControllerUtilities.findMoveTicket(Integer.parseInt(currentNode1), ticket3);
                 theControllerUtilities.playMove(move);
+                theView.getMapJPanel().getRidOfAllBorders();
+                theView.getMapJPanel().circleButtons(theModel.getColourToLocationMap());
                 theControllerUtilities.nextPlayer();
             }
             nodeToggle = 0;

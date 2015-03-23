@@ -185,9 +185,13 @@ public class View extends JPanel {
         mapJPanel.unpressAllButtonsMap();
     }
 
+
     public void pressSpecificMapButton(String nodeNumber, Boolean b) {
         mapJPanel.pressSpecificMapButton(nodeNumber,b);
     }
+
+    public MapJPanel getMapJPanel(){ return mapJPanel;}
+
 
 }
 
