@@ -22,7 +22,8 @@ public class Controller implements ControllerButtonListener {
     InitFrame initFrame;
     ControllerUtilities theControllerUtilities;
     int doubleMoveToggle = 0;
-    int moveToggle = 0;
+    int nodeToggle = 0;
+    int toggleTicket = 0;
 
     Ticket ticket1 = Ticket.DoubleMove;
     Ticket ticket2 = Ticket.DoubleMove;
@@ -43,8 +44,6 @@ public class Controller implements ControllerButtonListener {
         //selectedNode = theModel.getPlayerLocation(theModel.getCurrentPlayer());
         initFrame.addListener(this);
     }
-
-
 
     @Override
     public void taxiTicketPressed(String playerName) {
@@ -120,29 +119,23 @@ public class Controller implements ControllerButtonListener {
     }
 
 
-
-
+    //ticket panel
     public void pressedButtonAction(String playerName, Ticket currentTicket){
         System.out.println("button recieved at controller" + playerName);
         theView.unpressAllButtonsMap();
         currentNode1 = "0";
         currentNode2 = "0";
+        nodeToggle = 0;
 
         if(doubleMoveToggle == 1){
             doubleMovePressed(currentTicket);
         }
         else {
-            if (moveToggle == 1){
-                moveToggle = 0;
-            }
-            else{
-                moveToggle = 1;
-            }
             List<Move> moves = theControllerUtilities.findMoves(currentTicket);
             theControllerUtilities.displayCurrentMoves(moves);
             theView.activateSpecificButtonsPanelException(currentTicket.name(), false, theModel.getCurrentPlayer());
-            toggleGoButton();
             ticket3 = currentTicket;
+            toggleTicket = 1;
 
             if(moves.size() == 0){
                 //theView.printConsole("No Taxi Tickets availible");
@@ -158,13 +151,7 @@ public class Controller implements ControllerButtonListener {
         else {
             theControllerUtilities.displayCurrentMoves(theModel.getValidMoves(theModel.getCurrentPlayer()));
             theControllerUtilities.showValidTickets(theModel.getValidMoves(theModel.getCurrentPlayer()));
-
-            if (moveToggle == 1){
-                moveToggle = 0;
-            }
-            else{
-                moveToggle = 1;
-            }
+            toggleTicket = 0;
             toggleGoButton();
         }
 
@@ -183,17 +170,18 @@ public class Controller implements ControllerButtonListener {
                 theControllerUtilities.playMove(move);
                 theControllerUtilities.nextPlayer();
             }
-            moveToggle = 0;
+            nodeToggle = 0;
             doubleMoveToggle = 0;
+            toggleTicket = 0;
         }
 
     public void toggleGoButton() {
         Set<ButtonHolder> buttons = theView.findSelectedButtons();
-        if(buttons.size() == 2 && doubleMoveToggle == 2) {
+        if(buttons.size() == 2 && doubleMoveToggle == 1 && toggleTicket == 2) {
             theView.goButtonToggle(true);
-            doubleMoveToggle = 1;
+            toggleTicket = 0;
         }
-        else if (buttons.size() == 1 && doubleMoveToggle == 0 && moveToggle == 1){
+        else if (buttons.size() == 1 && doubleMoveToggle == 0 && nodeToggle == 1 && toggleTicket == 1){
             theView.goButtonToggle(true);
         }
         else{
@@ -205,18 +193,41 @@ public class Controller implements ControllerButtonListener {
     public void mapButtonPressed(String nodeNumber) {
         System.out.println("controller PR "+nodeNumber);
         toggleGoButton();
-        if(currentNode1.equals("0")){
-            currentNode1 = nodeNumber;
+
+        if (doubleMoveToggle == 1) {
+            if (currentNode1.equals("0")) {
+                currentNode1 = nodeNumber;
+            } else {
+                currentNode2 = nodeNumber;
+            }
+            checkAllowedNodes(nodeNumber);
         }
-        else{
-            currentNode2 = nodeNumber;
+        else {
+            currentNode1 = nodeNumber;
+            theView.unpressAllButtonsMap();
+            theView.pressSpecificMapButton(nodeNumber,true);
+            nodeToggle = 1;
+            toggleGoButton();
         }
 
     }
 
+
+
     @Override
     public void mapButtonUnpressed(String nodeNumber) {
         System.out.println("controller UN "+nodeNumber);
+
+        if (doubleMoveToggle == 1){
+            doubleMoveSortMapTickets();
+            if (currentNode1.equals(nodeNumber)) {
+                currentNode1 = currentNode2;
+                currentNode2 = "0";
+            }
+            else {
+                currentNode2 = "0";
+            }
+        }
 
         if(nodeNumber.equals(currentNode1)){
             currentNode1 = "0";
@@ -227,6 +238,8 @@ public class Controller implements ControllerButtonListener {
         else {
             currentNode2 = "0";
         }
+        nodeToggle = 0;
+        toggleGoButton();
     }
 
     public void doubleMovePressed(Ticket currentTicket) {
@@ -255,6 +268,7 @@ public class Controller implements ControllerButtonListener {
             ticket2 = Ticket.DoubleMove;
             doubleMoveSortMapTickets();
         }
+        toggleTicket = 1;
     }
 
 
@@ -276,7 +290,7 @@ public class Controller implements ControllerButtonListener {
             List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,ticket1, theControllerUtilities.moveDoubles);
             List<Move> movesSortedByTicketsNode1AND2 = theControllerUtilities.sortMoveDoubleByTicket(1, ticket2, movesSortedByTicketsNode1);
             theControllerUtilities.displayCurrentMoves(movesSortedByTicketsNode1AND2);
-            doubleMoveToggle = 2;
+            toggleTicket = 2;
             toggleGoButton();
         }
     }
@@ -287,6 +301,15 @@ public class Controller implements ControllerButtonListener {
 
     public void setTheModel(ScotlandYardModel theModel){
         this.theModel = theModel;
+    }
+
+    private void checkAllowedNodes(String node) {
+        if (currentNode2.equals("0")) {
+            List <Move> moves = theControllerUtilities.findAllDoubleMoveTicketsWithXNode(node);
+            theControllerUtilities.showCurrentValidMoves(moves);
+        }
+
+
     }
 
 }

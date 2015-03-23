@@ -297,4 +297,21 @@ public class ControllerUtilities {
         }
     }
 
+
+    public  List<Move> findAllDoubleMoveTicketsWithXNode(String node) {
+        List<Move> moves = new ArrayList<Move>();
+        for (Move moveDouble : moveDoubles) {
+            if (moveDouble instanceof MoveDouble){
+                for (Move move : ((MoveDouble) moveDouble).moves) {
+                    if (move instanceof MoveTicket){
+                        if (((MoveTicket) move).target == Integer.parseInt(node)){
+                            moves.add(moveDouble);
+                        }
+                    }
+                }
+            }
+        }
+        return moves;
+    }
+
 }

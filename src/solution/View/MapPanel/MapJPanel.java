@@ -96,6 +96,13 @@ public class MapJPanel extends JPanel implements ActionListener {
         for (ButtonHolder button : buttons) {
             button.setSelected(false);
         }
+    }
 
+    public void pressSpecificMapButton(String nodeNumber, Boolean b) {
+        for (ButtonHolder button : buttons) {
+            if (button.getText().equals(nodeNumber)) {
+                button.setSelected(b);
+            }
+        }
     }
 }
