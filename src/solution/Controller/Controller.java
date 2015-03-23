@@ -228,13 +228,14 @@ public class Controller implements ControllerButtonListener {
             if (currentNode1.equals(nodeNumber)) {
                 currentNode1 = currentNode2;
                 currentNode2 = "0";
+                checkAllowedNodes(currentNode1);
             }
             else {
                 currentNode2 = "0";
+                checkAllowedNodes(currentNode1);
             }
         }
-
-        if(nodeNumber.equals(currentNode1)){
+        else if(nodeNumber.equals(currentNode1)){
             currentNode1 = "0";
             if(!currentNode2.equals("0")){
                 currentNode1 = currentNode2;
@@ -243,6 +244,7 @@ public class Controller implements ControllerButtonListener {
         else {
             currentNode2 = "0";
         }
+
         nodeToggle = 0;
         toggleGoButton();
     }
@@ -264,6 +266,7 @@ public class Controller implements ControllerButtonListener {
     }
 
     public void doubleMoveUnpressed(Ticket currentTicket) {
+
         if (currentTicket.equals(ticket1)) {
             ticket1 = ticket2;
             ticket2 = Ticket.DoubleMove;
@@ -295,6 +298,9 @@ public class Controller implements ControllerButtonListener {
             List<Move> movesSortedByTicketsNode1 = theControllerUtilities.sortMoveDoubleByTicket(0,ticket1, theControllerUtilities.moveDoubles);
             List<Move> movesSortedByTicketsNode1AND2 = theControllerUtilities.sortMoveDoubleByTicket(1, ticket2, movesSortedByTicketsNode1);
             theControllerUtilities.displayCurrentMoves(movesSortedByTicketsNode1AND2);
+            theView.activateSpecificButtonsPanelException("DoubleMove", false, Colour.Black);
+            theView.activateSpecificButtonsPanel(ticket1.toString(), true, Colour.Black);
+            theView.activateSpecificButtonsPanel(ticket2.toString(), true, Colour.Black);
             toggleTicket = 2;
             toggleGoButton();
         }
